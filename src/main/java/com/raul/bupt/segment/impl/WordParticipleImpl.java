@@ -1,8 +1,10 @@
 package com.raul.bupt.segment.impl;
 
+import com.raul.bupt.segment.NLPIRProxy;
 import com.raul.bupt.segment.WordParticiple;
 import kevin.zhang.NLPIR;
 
+import java.awt.*;
 import java.io.*;
 
 /**
@@ -10,8 +12,11 @@ import java.io.*;
  */
 public class WordParticipleImpl  implements WordParticiple{
 
-    //分词工具
-    private static NLPIR nlpir = new NLPIR();
+    //完成了初始化的分词工具
+    private NLPIR nlpir = NLPIRProxy.getInstance();
+    //获取所有停用词
+    private List stopWordList = getStopWordList();
+
 
     /**
      * 对句子进行分词
@@ -21,14 +26,11 @@ public class WordParticipleImpl  implements WordParticiple{
      */
     public String wordSegment(String sentence,boolean pos) {
 
+        sentence = preprocess(sentence);
+
         String wordSegmentResult = "";
 
         try {
-            // NLPIR_Init方法第二个参数设置0表示编码为GBK, 1表示UTF8编码(此处结论不够权威)
-            if (!NLPIR.NLPIR_Init("./".getBytes("utf-8"), 1)) {
-                System.out.println("NLPIR初始化失败...");
-            }
-
             //判断是否需要词性标注
             int withPos = 0;
             if(pos) {
@@ -48,7 +50,41 @@ public class WordParticipleImpl  implements WordParticiple{
         }
     }
 
+    /**
+     * 获取所有停用词
+     * @return
+     */
+    private List getStopWordList() {
+        return null;
+    }
 
+    /**
+     * 对输入文本进行预处理
+     * @param sentence
+     * @return
+     */
+    private String preprocess(String sentence) {
+        sentence = sentence.trim().replaceAll("(?m)^[ 　\r\n]+|[ 　]+$","").toLowerCase(); //去掉开头和结尾的空格，并将所有字母转换为小写
+        sentence = sentence.replaceAll("\\s+", " ").replaceAll("[\r\n]", "，");  //去掉多余的空格和换行符
+
+        try {
+            //进行编码转换
+            byte[] bytes = sentence.getBytes("utf-8");
+            sentence = new String(bytes);
+        }catch(UnsupportedEncodingException e) {
+        }finally {
+            return sentence;
+        }
+    }
+
+    /**
+     * 对句子进行分词处理，删除其中的标点符号和停用词
+     * @param sentence
+     * @return
+     */
+    public String wordSegmentWithoutStopWord(String sentence) {
+        return null;
+    }
 
     /**
      * 将新词词典导入到用户词典当中，并进行保存
@@ -60,14 +96,13 @@ public class WordParticipleImpl  implements WordParticiple{
 
         for(File file : files) {
             try {
-                InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file),"gbk");
+                InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file),"utf-8");
                 BufferedReader br = new BufferedReader(inputStreamReader);
 
                 String word = br.readLine();
                 while(word != null) {
                     word = word.trim();
 
-                    word = "AC米兰";
 
                     byte[] ret = word.getBytes("utf-8");
                     nlpir.NLPIR_AddUserWord(ret);
@@ -85,11 +120,12 @@ public class WordParticipleImpl  implements WordParticiple{
     }
 
 
-    static final WordParticiple wordParticiple = new WordParticipleImpl();
-    public static void main(String[] args) {
 
+    public static void main(String[] args) throws Exception{
 
-        String sentence = "我爱AC米兰...";
+        WordParticiple wordParticiple = new WordParticipleImpl();
+
+        String sentence = "卡卡在AC米兰...";
         wordParticiple.wordSegment(sentence,false);
 
 
