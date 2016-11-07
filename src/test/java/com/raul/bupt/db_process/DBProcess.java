@@ -33,8 +33,6 @@ public class DBProcess {
                 String reviewId = resultSet.getString("reviewId");
                 String content = resultSet.getString("content");
 
-//                wordParticiple.findNewWords(content);
-//                wordParticiple.findKeyWords(content);
 
                 reviewMap.put(reviewId,content);
             }
