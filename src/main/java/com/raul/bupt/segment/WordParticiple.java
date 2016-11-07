@@ -1,8 +1,6 @@
 package com.raul.bupt.segment;
 
-import com.huaban.analysis.jieba.JiebaSegmenter;
-
-import java.io.File;
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/11/6.
@@ -23,7 +21,12 @@ public interface WordParticiple {
     public String wordSegmentWithoutStopWord(String sentence);
 
     /**
-     * 将新词导入到用户词典当中
+     * 读取词典，将新词导入到用户词典当中
      */
-    public void updateUserDict(String filesPath);
+    public void updateUserDict();
+
+    /**
+     * 将词导入到用户词典当中
+     */
+    public void addNewWord(List wordList);
 }

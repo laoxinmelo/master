@@ -1,10 +1,11 @@
 package com.raul.bupt.segment.impl;
 
-import com.raul.bupt.segment.NLPIRProxy;
+import com.raul.bupt.segment.proxy.NLPIRProxy;
 import com.raul.bupt.segment.WordParticiple;
 import kevin.zhang.NLPIR;
 
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.io.*;
 
 /**
@@ -14,8 +15,14 @@ public class WordParticipleImpl  implements WordParticiple{
 
     //完成了初始化的分词工具
     private NLPIR nlpir = NLPIRProxy.getInstance();
-    //获取所有停用词
-    private List stopWordList = getStopWordList();
+    //所有停用词
+    private List<String> stopWordList = getStopWordList();
+    //停用词存放路径
+    private static final String stopWordPath = "./corpus/stopword/中文停用词表.txt";
+    //词典存放路径
+    private static final String dictFilePath = "./corpus/dict/";
+    //标点符号在ICTCLAS中的标注
+    private static final String punctuation = "w";
 
 
     /**
@@ -25,6 +32,10 @@ public class WordParticipleImpl  implements WordParticiple{
      * @return
      */
     public String wordSegment(String sentence,boolean pos) {
+
+        if(sentence == null) {
+            throw new NullPointerException("The Input Sentence is NULL....");
+        }
 
         sentence = preprocess(sentence);
 
@@ -54,8 +65,30 @@ public class WordParticipleImpl  implements WordParticiple{
      * 获取所有停用词
      * @return
      */
-    private List getStopWordList() {
-        return null;
+    private List<String> getStopWordList() {
+        File file = new File(stopWordPath);
+        List<String> stopWordList = new ArrayList<String>();
+
+        try {
+            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file),"gbk");
+            BufferedReader br = new BufferedReader(inputStreamReader);
+
+            String word = br.readLine();
+            while(word != null) {
+                word = word.trim();
+                if(!stopWordList.contains(word)) {
+                      stopWordList.add(word);
+                }
+                word = br.readLine();
+            }
+
+        }catch (FileNotFoundException e) {
+            System.err.println("FileNotFound...");
+        }catch (IOException e) {}
+        finally {
+            return stopWordList;
+        }
+
     }
 
     /**
@@ -83,16 +116,32 @@ public class WordParticipleImpl  implements WordParticiple{
      * @return
      */
     public String wordSegmentWithoutStopWord(String sentence) {
-        return null;
+        if(sentence == null) {
+            throw new NullPointerException("The Input Sentence is NULL....");
+        }
+
+        String segmentSentence = wordSegment(sentence,true);
+        String segmentSentenceWithoutStopWord = "";
+        for(String wordUnit:segmentSentence.split(" ")) {
+            String word = wordUnit.substring(0,wordUnit.indexOf("/"));
+            String pos = wordUnit.substring(wordUnit.indexOf("/")+1);
+
+            if(stopWordList.contains(word) || pos.startsWith(punctuation)) {
+                continue;
+            }
+            segmentSentenceWithoutStopWord += word + " ";
+        }
+
+        return segmentSentenceWithoutStopWord;
     }
 
     /**
      * 将新词词典导入到用户词典当中，并进行保存
-     * @param filesPath
+     * @param
      */
-    public void updateUserDict(String filesPath) {
+    public void updateUserDict() {
 
-        File[] files = new File(filesPath).listFiles();
+        File[] files = new File(dictFilePath).listFiles();
 
         for(File file : files) {
             try {
@@ -114,20 +163,40 @@ public class WordParticipleImpl  implements WordParticiple{
                 }
 
             }catch (FileNotFoundException e) {
-                System.err.println("FileNotFound...");
+                System.err.println("File Not Found...");
             }catch (IOException e) {}
         }
     }
 
+    /**
+     * 将新词加入到用户词典中并保存
+     * @param wordList
+     */
+    public void addNewWord(List wordList) {
+        for(Object word : wordList) {
+            try {
+                byte[] ret = word.toString().getBytes("utf-8");
+                nlpir.NLPIR_AddUserWord(ret);
+                nlpir.NLPIR_SaveTheUsrDic();
+                nlpir.NLPIR_ImportUserDict(ret);
+            }catch (UnsupportedEncodingException e) {
+                System.err.println("Encoding Error...");
+            }
+        }
+    }
 
 
+    /**
+     * 测试主函数
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception{
 
         WordParticiple wordParticiple = new WordParticipleImpl();
 
-        String sentence = "卡卡在AC米兰...";
-        wordParticiple.wordSegment(sentence,false);
-
+        String sentence = "卡卡在AC米兰啊...";
+        System.out.println(wordParticiple.wordSegmentWithoutStopWord(sentence));
 
     }
 }
