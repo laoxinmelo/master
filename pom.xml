@@ -32,6 +32,12 @@
             <version>2.0.5</version>
         </dependency>
 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.38</version>
+        </dependency>
+
         <!--测试工具-->
         <dependency>
             <groupId>junit</groupId>

@@ -1,7 +1,6 @@
 package com.raul.bupt.db.impl;
 
 import com.raul.bupt.db.DBTool;
-
 import java.sql.*;
 
 /**

@@ -56,7 +56,6 @@ public class WordParticipleImpl  implements WordParticiple{
             System.err.println("NLPIR File Encoding Error...");
         }
         finally {
-            System.out.println(wordSegmentResult);
             return wordSegmentResult;
         }
     }
@@ -99,6 +98,7 @@ public class WordParticipleImpl  implements WordParticiple{
     private String preprocess(String sentence) {
         sentence = sentence.trim().replaceAll("(?m)^[ 　\r\n]+|[ 　]+$","").toLowerCase(); //去掉开头和结尾的空格，并将所有字母转换为小写
         sentence = sentence.replaceAll("\\s+", " ").replaceAll("[\r\n]", "，");  //去掉多余的空格和换行符
+        sentence = sentence.replaceAll(" ","，");
 
         try {
             //进行编码转换
