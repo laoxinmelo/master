@@ -2,10 +2,12 @@ package com.raul.bupt.parser.proxy;
 
 import edu.stanford.nlp.trees.TypedDependency;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/11/7.
  */
-public class TypedDependencyProxy {
+public class TypedDependencyProxy implements Serializable{
 
     private TypedDependency typedDependency; //语义依赖关系
     private String govPos; //第一个词的词性

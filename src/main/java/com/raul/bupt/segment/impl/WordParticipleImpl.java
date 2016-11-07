@@ -2,6 +2,7 @@ package com.raul.bupt.segment.impl;
 
 import com.raul.bupt.segment.proxy.NLPIRProxy;
 import com.raul.bupt.segment.WordParticiple;
+import com.sun.deploy.util.StringUtils;
 import kevin.zhang.NLPIR;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class WordParticipleImpl  implements WordParticiple{
     private static final String dictFilePath = "./corpus/dict/";
     //标点符号在ICTCLAS中的标注
     private static final String punctuation = "w";
+    //新词和关键词的对应数量
+    private static final int wordNum = 10;
 
 
     /**
@@ -194,9 +197,61 @@ public class WordParticipleImpl  implements WordParticiple{
     public static void main(String[] args) throws Exception{
 
         WordParticiple wordParticiple = new WordParticipleImpl();
-
-        String sentence = "卡卡在AC米兰啊...";
-        System.out.println(wordParticiple.wordSegmentWithoutStopWord(sentence));
+        wordParticiple.updateUserDict();
 
     }
+
+    /**
+    * 找出句子中的关键词，并导入到用户词典当中
+    * @param sentence
+    */
+    public void findKeyWords(String sentence) {
+        try {
+            byte[] bytes = nlpir.NLPIR_GetKeyWords(sentence.getBytes("utf-8"), wordNum, false);
+            String keyWordStr = new String(bytes).trim().replaceAll("\\s+"," ");
+            if(keyWordStr.equals(" ") || keyWordStr.equals("")) {
+                return ;
+            }
+
+            for(String keyWord:keyWordStr.split(" ")){
+                System.out.println(keyWord);
+                byte[] ret = keyWord.toString().getBytes("utf-8");
+                nlpir.NLPIR_AddUserWord(ret);
+                nlpir.NLPIR_SaveTheUsrDic();
+                nlpir.NLPIR_ImportUserDict(ret);
+            }
+
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 找出句子中的关键词，并导入到用户词典当中
+     * @param sentence
+     */
+    public void findNewWords (String sentence){
+        try {
+            byte[] bytes = nlpir.NLPIR_GetNewWords(sentence.getBytes("utf-8"), wordNum, false);
+            String newWordStr = new String(bytes).trim().replaceAll("\\s+"," ");
+
+            if(newWordStr.equals(" ") || newWordStr.equals("")) {
+                return ;
+            }
+
+            for(String newWord:newWordStr.split(" ")){
+                System.out.println(newWord);
+                byte[] ret = newWord.toString().getBytes("utf-8");
+                nlpir.NLPIR_AddUserWord(ret);
+                nlpir.NLPIR_SaveTheUsrDic();
+                nlpir.NLPIR_ImportUserDict(ret);
+            }
+
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+
+    }
+
 }

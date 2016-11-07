@@ -6,6 +6,7 @@ import edu.stanford.nlp.ling.TaggedWord;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.trees.*;
 
+import java.io.StringReader;
 import java.util.List;
 
 /**
@@ -20,7 +21,6 @@ public class ParserImpl implements Parser {
     //句法依赖解析模型，用于语义依赖分析
     protected static final GrammaticalStructureFactory grammaticalStructureFactory = NLPProxy.getGrammaticalStructureFactoryInstance(treebankLanguagePack);
 
-
     /**
      * 对句子进行解析，获取其语义依赖树，用于进行词性标注
      * @param sentence
@@ -30,8 +30,7 @@ public class ParserImpl implements Parser {
         if(sentence == null)  {
             throw new NullPointerException("The Input Sentence is NULL...");
         }
-
-        return lexicalizedParser.parse(sentence);
+        return lexicalizedParser.parse(treebankLanguagePack.getTokenizerFactory().getTokenizer(new StringReader(sentence)).tokenize());
     }
 
     /**

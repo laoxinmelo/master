@@ -29,4 +29,16 @@ public interface WordParticiple {
      * 将词导入到用户词典当中
      */
     public void addNewWord(List wordList);
+
+    /**
+     * 找出句子中的关键词，并导入到用户词典当中
+     * @param sentence
+     */
+    public void findKeyWords(String sentence);
+
+    /**
+     * 找出句子中的关键词，并导入到用户词典当中
+     * @param sentence
+     */
+    public void findNewWords(String sentence);
 }

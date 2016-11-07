@@ -4,14 +4,13 @@ import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.trees.GrammaticalStructureFactory;
 import edu.stanford.nlp.trees.TreebankLanguagePack;
 
-import java.io.IOException;
 
 /**
  * Created by Administrator on 2016/11/7.
  */
 public class NLPProxy {
 
-    private static final String grammarModel = "edu/stanford/nlp/models/lexparser/chinesePCFG.ser.gz"; //需要加载的模型
+    private static final String grammarModel = "edu/stanford/nlp/models/lexparser/chinesePCFG.ser.gz"; //需要加载的语义解析模型
     private static final int maxLength = 80;   //所需处理句子的最大长度
 
 
@@ -51,6 +50,7 @@ public class NLPProxy {
 
         return treebankLanguagePack.grammaticalStructureFactory();
     }
+
 
 
 
