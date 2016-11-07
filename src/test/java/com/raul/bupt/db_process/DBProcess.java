@@ -20,6 +20,8 @@ public class DBProcess {
     private static final DBTool dbTool = new DBToolImpl();
     //分词工具
     private static final WordParticiple wordParticiple = new WordParticipleImpl();
+    //记录上次停止的id...
+    private static final int lastTime = 1;
 
     public static void main(String[] args) {
 
@@ -42,8 +44,14 @@ public class DBProcess {
         Set keySet = reviewMap.keySet();
         Iterator iterator = keySet.iterator();
 
-        int count = 1;
+        int count = 0;
         while (iterator.hasNext()) {
+            count += 1;
+
+            if(count<lastTime) {
+                continue;
+            }
+
             String reviewId = (String)iterator.next();
             String content = reviewMap.get(reviewId);
 
@@ -53,7 +61,7 @@ public class DBProcess {
             String updateSql = String.format("update review set segment=\"%s\" , segmentNoSW=\"%s\" where reviewId=\"%s\"",segment,segmentNoSW,reviewId);
             System.out.println(count + "    " + updateSql);
             dbTool.execute(updateSql);
-            count += 1;
+
         }
     }
 }
