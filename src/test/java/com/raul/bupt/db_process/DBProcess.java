@@ -2,7 +2,6 @@ package com.raul.bupt.db_process;
 
 import com.raul.bupt.db.DBTool;
 import com.raul.bupt.db.impl.DBToolImpl;
-import com.raul.bupt.parser.adapter.ParserImplAdapter;
 import com.raul.bupt.segment.WordParticiple;
 import com.raul.bupt.segment.impl.WordParticipleImpl;
 
