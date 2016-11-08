@@ -53,7 +53,7 @@ public class WordParticipleImpl  implements WordParticiple{
 
             //对储存了文件内容的字符串分词
             byte [] resBytes = nlpir.NLPIR_ParagraphProcess(sentence.getBytes("utf-8"), withPos);
-            wordSegmentResult = new String(resBytes, "utf-8").replaceAll("\\s+", " ").trim();
+            wordSegmentResult = new String(resBytes, "utf-8").replaceAll(" +", " ").trim();
 
         }catch (UnsupportedEncodingException e) {
             System.err.println("NLPIR File Encoding Error...");
@@ -126,6 +126,11 @@ public class WordParticipleImpl  implements WordParticiple{
         String segmentSentence = wordSegment(sentence,true);
         String segmentSentenceWithoutStopWord = "";
         for(String wordUnit:segmentSentence.split(" ")) {
+
+            if(!wordUnit.contains("/")) {
+                continue;
+            }
+
             String word = wordUnit.substring(0,wordUnit.indexOf("/"));
             String pos = wordUnit.substring(wordUnit.indexOf("/")+1);
 
