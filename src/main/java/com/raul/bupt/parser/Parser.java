@@ -16,7 +16,7 @@ public interface Parser {
      * @param sentence
      * @return
      */
-    public List<TaggedWord> wordPosTag(String sentence);
+    public List wordPosTag(String sentence);
 
     /**
      * 输出句法依赖树的结构

@@ -38,7 +38,7 @@ public class ParserImpl implements Parser {
      * @param sentence
      * @return
      */
-    public List<TaggedWord> wordPosTag(String sentence) {
+    public List wordPosTag(String sentence) {
 
         if(sentence == null)  {
             throw new NullPointerException("The Input Sentence is NULL...");

@@ -32,7 +32,7 @@ public class FeatureExtract {
      * @return
      */
     public static List  getAllItem() {
-        String sql = "select itemId from product where id between 3 and 10";
+        String sql = "select itemId from product;";
         List<String> itemList = new ArrayList<String>();
 
         ResultSet resultSet = dbTool.query(sql);

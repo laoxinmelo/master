@@ -45,15 +45,11 @@ public class WordParticipleImpl  implements WordParticiple{
         String wordSegmentResult = "";
 
         try {
-            //判断是否需要词性标注
-            int withPos = 0;
-            if(pos) {
-                withPos = 1;
-            }
 
             //对储存了文件内容的字符串分词
-            byte [] resBytes = nlpir.NLPIR_ParagraphProcess(sentence.getBytes("utf-8"), withPos);
+            byte [] resBytes = nlpir.NLPIR_ParagraphProcess(sentence.getBytes("utf-8"), 1);
             wordSegmentResult = new String(resBytes, "utf-8").replaceAll(" +", " ").trim();
+            wordSegmentResult = delMeanless(wordSegmentResult,pos); //删除一些无效内容
 
         }catch (UnsupportedEncodingException e) {
             System.err.println("NLPIR File Encoding Error...");
@@ -101,7 +97,6 @@ public class WordParticipleImpl  implements WordParticiple{
     private String preprocess(String sentence) {
         sentence = sentence.trim().replaceAll("(?m)^[ 　\r\n]+|[ 　]+$","").toLowerCase(); //去掉开头和结尾的空格，并将所有字母转换为小写
         sentence = sentence.replaceAll("\\s+", " ").replaceAll("[\r\n]", "，");  //去掉多余的空格和换行符
-        sentence = sentence.replaceAll(" ","，");
 
         try {
             //进行编码转换
@@ -111,6 +106,32 @@ public class WordParticipleImpl  implements WordParticiple{
         }finally {
             return sentence;
         }
+    }
+
+    /**
+     * 去掉无效内容，如空格、Tab键等
+     * @param sentence
+     * @return
+     */
+    private String delMeanless(String sentence,boolean withPos) {
+
+        String segmentSentence = "";
+        for(String wordUnit:sentence.split(" ")) {
+
+            if(!wordUnit.contains("/")) {
+                continue;
+            }
+
+            String word = wordUnit.substring(0,wordUnit.indexOf("/"));
+            String pos = wordUnit.substring(wordUnit.indexOf("/")+1);
+
+            if(withPos) {
+                segmentSentence += wordUnit + " ";
+            }else {
+                segmentSentence += word + " ";
+            }
+        }
+        return segmentSentence.trim();
     }
 
     /**
@@ -140,7 +161,7 @@ public class WordParticipleImpl  implements WordParticiple{
             segmentSentenceWithoutStopWord += word + " ";
         }
 
-        return segmentSentenceWithoutStopWord;
+        return segmentSentenceWithoutStopWord.trim();
     }
 
     /**
@@ -182,28 +203,8 @@ public class WordParticipleImpl  implements WordParticiple{
      */
     public void addNewWord(List wordList) {
         for(Object word : wordList) {
-            try {
-                byte[] ret = word.toString().getBytes("utf-8");
-                nlpir.NLPIR_AddUserWord(ret);
-                nlpir.NLPIR_SaveTheUsrDic();
-                nlpir.NLPIR_ImportUserDict(ret);
-            }catch (UnsupportedEncodingException e) {
-                System.err.println("Encoding Error...");
-            }
+                saveNewWord((String) word);
         }
-    }
-
-
-    /**
-     * 测试主函数
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception{
-
-        WordParticiple wordParticiple = new WordParticipleImpl();
-        wordParticiple.updateUserDict();
-
     }
 
     /**
@@ -219,18 +220,14 @@ public class WordParticipleImpl  implements WordParticiple{
             }
 
             for(String keyWord:keyWordStr.split(" ")){
-                System.out.println(keyWord);
-                byte[] ret = keyWord.toString().getBytes("utf-8");
-                nlpir.NLPIR_AddUserWord(ret);
-                nlpir.NLPIR_SaveTheUsrDic();
-                nlpir.NLPIR_ImportUserDict(ret);
+                System.out.println("keyWord : " + keyWord);
+                saveNewWord(keyWord);
             }
 
         }catch (UnsupportedEncodingException e){
             e.printStackTrace();
         }
     }
-
 
     /**
      * 找出句子中的关键词，并导入到用户词典当中
@@ -246,11 +243,8 @@ public class WordParticipleImpl  implements WordParticiple{
             }
 
             for(String newWord:newWordStr.split(" ")){
-                System.out.println(newWord);
-                byte[] ret = newWord.toString().getBytes("utf-8");
-                nlpir.NLPIR_AddUserWord(ret);
-                nlpir.NLPIR_SaveTheUsrDic();
-                nlpir.NLPIR_ImportUserDict(ret);
+                System.out.println("newWord : " + newWord);
+                saveNewWord(newWord);
             }
 
         }catch (UnsupportedEncodingException e){
@@ -258,5 +252,34 @@ public class WordParticipleImpl  implements WordParticiple{
         }
 
     }
+
+    /**
+     *
+     * @param word
+     */
+    private void saveNewWord(String word) {
+        try {
+            byte[] ret = word.toString().getBytes("utf-8");
+            nlpir.NLPIR_AddUserWord(ret);
+            nlpir.NLPIR_SaveTheUsrDic();
+            nlpir.NLPIR_ImportUserDict(ret);
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 测试主函数
+     * @param args
+     * @throws Exception
+     */
+    public static void main(String[] args) throws Exception{
+
+        WordParticiple wordParticiple = new WordParticipleImpl();
+        wordParticiple.updateUserDict();
+    }
+
+
 
 }
