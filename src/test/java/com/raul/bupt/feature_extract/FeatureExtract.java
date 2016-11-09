@@ -31,7 +31,7 @@ public class FeatureExtract {
      * 获取所有ItemId
      * @return
      */
-    private static List  getAllItem() {
+    public static List  getAllItem() {
         String sql = "select itemId from product where id between 3 and 10";
         List<String> itemList = new ArrayList<String>();
 

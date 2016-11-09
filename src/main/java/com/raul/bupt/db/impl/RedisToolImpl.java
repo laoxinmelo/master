@@ -35,7 +35,8 @@ public class RedisToolImpl implements RedisTool {
      * @return
      */
     public String getValue(int dbIndex,String key) {
-        return null;
+        jedis.select(dbIndex);
+        return jedis.get(key);
     }
 
     /**
