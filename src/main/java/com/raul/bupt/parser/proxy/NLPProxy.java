@@ -11,7 +11,7 @@ import edu.stanford.nlp.trees.TreebankLanguagePack;
 public class NLPProxy {
 
     private static final String grammarModel = "edu/stanford/nlp/models/lexparser/chinesePCFG.ser.gz"; //需要加载的语义解析模型
-    private static final int maxLength = 80;   //所需处理句子的最大长度
+    private static final int maxLength = 200;   //所需处理句子的最大长度
 
 
     /**

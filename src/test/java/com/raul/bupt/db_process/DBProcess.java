@@ -32,6 +32,31 @@ public class DBProcess {
     private static final WordParticiple wordParticiple = new WordParticipleImpl();
 
 
+
+    /**
+     * 获取所有ItemId
+     * @return
+     */
+    private static List  getAllItem() {
+        String sql = "select itemId from product;";
+        List<String> itemList = new ArrayList<String>();
+
+        ResultSet resultSet = dbTool.query(sql);
+        try {
+            while (resultSet.next()) {
+                String itemId = resultSet.getString("itemId");
+                if(!itemList.contains(itemId)) {
+                    itemList.add(itemId);
+                }
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            return itemList;
+        }
+    }
+
+
     /**
      * 将分词结果存储到redis中(有词性标注)
      * @throws Exception
@@ -40,7 +65,7 @@ public class DBProcess {
 
         for(File file : new File("result/temp").listFiles()) {
 
-            if(!file.getName().contains("result_")) {
+            if(!file.getName().equals("result_append.txt")) {
                 continue;
             }
 
@@ -48,48 +73,26 @@ public class DBProcess {
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String temp = bufferedReader.readLine();
 
+            int num = 1;
             while (temp != null) {
 
-                String reviewId = temp.substring(0, temp.indexOf("\t"));
-                String content = temp.substring(temp.indexOf("\t")+1);
-
-                System.out.println(reviewId);
-
-                if(file.getName().contains("append")) {
-                    String value = redisTool.getValue(2,reviewId);
-                    if(value!=null) {
-                        String[] valueArray = value.split("\r\n");
-
-                        value = valueArray[0] + "\r\n" + valueArray[1] + "\r\n" + content;
-                        redisTool.setValue(2,reviewId,value);
-                        System.out.println(value);
-                        System.out.println("______________________");
-                    }
+                String reviewId = temp.substring(0, temp.indexOf("\t")).replaceAll("[^0-9]","");
+                String contentWithPos = temp.substring(temp.indexOf("\t")+1);
+                if(contentWithPos.startsWith("#")) {
+                    contentWithPos = contentWithPos.substring(contentWithPos.indexOf(" ")).trim();
                 }
 
-                if(file.getName().contains("review")) {
-                    String value = redisTool.getValue(2,reviewId);
-                    if(value!=null) {
-                        String[] valueArray = value.split("\r\n");
-
-                        value = valueArray[0] + "\r\n" + valueArray[1] + "\r\n" + content;
-                        redisTool.setValue(1,reviewId,value);
-                        System.out.println(value);
-                        System.out.println("______________________");
-                    }
+                String content = redisTool.getValue(2,reviewId);
+                int count = content.split("\r\n").length;
+                if(count < 3) {
+                    System.out.println(reviewId + " " + num + " " + count);
+                    String value = content + "\r\n" + contentWithPos;
+                    redisTool.setValue(2,reviewId,value);
+                    System.out.println(value);
+                    System.out.println("______________________________");
+                    num += 1;
                 }
 
-                if(file.getName().contains("reply")) {
-                    String value = redisTool.getValue(2,reviewId);
-                    if(value!=null) {
-                        String[] valueArray = value.split("\r\n");
-
-                        value = valueArray[0] + "\r\n" + valueArray[1] + "\r\n" + content;
-                        redisTool.setValue(3,reviewId,value);
-                        System.out.println(value);
-                        System.out.println("______________________");
-                    }
-                }
                 temp = bufferedReader.readLine();
             }
 
@@ -103,7 +106,7 @@ public class DBProcess {
      * @param dbIndex
      */
     public static void RedisSave(int dbIndex) throws Exception{
-        List itemList = FeatureExtract.getAllItem();
+        List itemList = getAllItem();
         int itemNum = 0;
         int totalCount = 0;
 
@@ -234,13 +237,8 @@ public class DBProcess {
 
     public static void main(String[] args) throws Exception{
 
-//        updateUserDict("review");
-//        updateUserDict("appendreview");
-//        updateUserDict("reply");
 
-
-        System.out.println(redisTool.getValue(1,"289408028959"));
-//        RedisSaveSegmentWithPos();
+        RedisSaveSegmentWithPos();
 
 //        for(int i=3;i<=3;i++) {
 //            try {
