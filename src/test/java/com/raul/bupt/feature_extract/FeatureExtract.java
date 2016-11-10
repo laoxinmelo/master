@@ -47,13 +47,14 @@ public class FeatureExtract {
 
         while(iterator.hasNext()) {
 
-
             String itemId = (String) iterator.next();
             List<RelationDO> relationDOList = new ArrayList<RelationDO>();
 
-
             String reviewIdSet = redisTool.getValue(0, itemId);
             String[] reviewArray = reviewIdSet.split(split);
+            if(reviewArray.length == 0) {
+                continue;
+            }
 
             for (int dbIndex = 1; dbIndex <= 2; dbIndex++) {
                 for (String reviewId : reviewArray) {
@@ -79,9 +80,15 @@ public class FeatureExtract {
                 }
             }
 
-            //保存结果
+            /**
+             * 保存细粒度特征提取结果
+             * 格式为：数量 + RelationDO
+             */
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("result/feature/" + itemId));
-            objectOutputStream.writeObject(relationDOList);
+            objectOutputStream.writeInt(relationDOList.size());
+            for(RelationDO relationDO : relationDOList) {
+                objectOutputStream.writeObject(relationDO);
+            }
             objectOutputStream.close();
             System.out.println("________________________________");
         }

@@ -1,9 +1,11 @@
 package com.raul.bupt.parser.dataobject;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/11/9.
  */
-public class WordDO {
+public class WordDO implements Serializable{
 
     private String word;
     private String pos;

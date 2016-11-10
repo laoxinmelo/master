@@ -179,7 +179,6 @@ public class ParserImplAdapter  extends ParserImpl{
              * 找出句子中所有细粒度特征语义关系
              */
             for (TypedDependency typedDependency : grammarRelationList) {
-                System.out.println(typedDependency);
                 GrammaticalRelation grammaticalRelation = typedDependency.reln();
 
                 //获取语义关系的名称
