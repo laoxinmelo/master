@@ -108,6 +108,10 @@ public class InferencerNew {
 		computeNewTheta();
 		computeNewPhi();
 		newModel.liter--;
+
+		/**
+		 * 模型保存已被注释
+		 */
 //		newModel.saveModel(newModel.dfile + "." + newModel.modelName);
 		return this.newModel;
 	}
