@@ -151,7 +151,7 @@ public class LDADataset {
 	public static LDADataset readDataSet(String filename){
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					new FileInputStream(filename), "GBK"));
+					new FileInputStream(filename), "utf-8"));
 			LDADataset data = readDataSet(reader);
 			
 			reader.close();
@@ -195,13 +195,11 @@ public class LDADataset {
 			//read number of document
 			String line;
 			line = reader.readLine();
-			System.out.println(line);
 			int M = Integer.parseInt(line);
 			
 			LDADataset data = new LDADataset(M);
 			for (int i = 0; i < M; ++i){
 				line = reader.readLine();
-				//System.out.println(line);
 				data.setDoc(line, i);
 			}
 			
@@ -245,7 +243,7 @@ public class LDADataset {
 	
 	/**
 	 * read a dataset from a string, create new dictionary
-	 * @param str String from which we get the dataset, documents are seperated by newline character 
+	 * @param strs String from which we get the dataset, documents are seperated by newline character
 	 * @return dataset if success and null otherwise
 	 */
 	public static LDADataset readDataSet(String [] strs){
@@ -259,7 +257,7 @@ public class LDADataset {
 	
 	/**
 	 * read a dataset from a string with respect to a specified dictionary
-	 * @param str String from which we get the dataset, documents are seperated by newline character	
+	 * @param strs String from which we get the dataset, documents are seperated by newline character
 	 * @param dict the dictionary
 	 * @return dataset if success and null otherwise
 	 */

@@ -44,7 +44,9 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-public class ModelNew {	
+import com.raul.bupt.jgibblda.*;
+
+public class ModelNew {
 
 	//---------------------------------------------------------------
 	//	Class Variables
@@ -61,7 +63,7 @@ public class ModelNew {
 	//---------------------------------------------------------------
 
 	public String wordMapFile; 		//file that contain word to id map
-	public String trainlogFile; 	//training log file	
+	public String trainlogFile; 	//training log file
 
 	public String dir;
 	public String dfile;
@@ -74,7 +76,7 @@ public class ModelNew {
 	public int K; //number of topics
 	public double alpha, beta; //LDA  hyperparameters
 	public int niters; //number of Gibbs sampling iteration
-	public int liter; //the iteration at which the model was saved��������ʱ�ĵ�������	
+	public int liter; //the iteration at which the model was saved——保存时的迭代次数
 	public int savestep; //saving period
 	public int twords; //print out top words per each topic
 	public int withrawdata;
@@ -85,7 +87,7 @@ public class ModelNew {
 
 	// Temp variables while sampling
 
-	//Vector��ʾһ�����϶�����һ������
+	//Vector表示一个集合而不是一个数组
 	public Vector<Integer> [] z; //topic assignments for words, size M x doc.size()
 	protected int [][] nw; //nw[i][j]: number of instances of word/term i assigned to topic j, size V x K
 	protected int [][] nd; //nd[i][j]: number of words in document i assigned to topic j, size M x K
@@ -93,20 +95,20 @@ public class ModelNew {
 	protected int [] ndsum; //ndsum[i]: total number of words in document i, size M
 
 	// temp variables for sampling
-	protected double [] p; 
-	public DecimalFormat df = new DecimalFormat("0.000000");//�趨С���ĸ�ʽ
+	protected double [] p;
+	public DecimalFormat df = new DecimalFormat("0.000000");//设定小数的格式
 
 	//---------------------------------------------------------------
 	//	Constructors
-	//---------------------------------------------------------------	
+	//---------------------------------------------------------------
 
 	public ModelNew(){
-		setDefaultValues();	
+		setDefaultValues();
 	}
 
 	/**
 	 * Set default values for variables
-	 * ���ó�ʼ����
+	 * 设置初始变量
 	 */
 	public void setDefaultValues(){
 		wordMapFile = "wordmap.txt";
@@ -122,7 +124,7 @@ public class ModelNew {
 		dir = "./";
 		dfile = "trndocs.dat";
 		modelName = "model-final";
-		modelStatus = Constants.MODEL_STATUS_UNKNOWN;		
+		modelStatus = Constants.MODEL_STATUS_UNKNOWN;
 
 		M = 0;
 		V = 0;
@@ -144,10 +146,10 @@ public class ModelNew {
 	//---------------------------------------------------------------
 	//	I/O Methods
 	//---------------------------------------------------------------
-	
+
 	/**
 	 * read other file to get parameters
-	 * ��ȡ��ʼ����
+	 * 获取初始参数
 	 */
 	protected boolean readOthersFile(String otherFile){
 		//open file <model>.others to read:
@@ -166,7 +168,7 @@ public class ModelNew {
 				String optval = tknr.nextToken();
 
 				if (optstr.equalsIgnoreCase("alpha")){
-					alpha = Double.parseDouble(optval);					
+					alpha = Double.parseDouble(optval);
 				}
 				else if (optstr.equalsIgnoreCase("beta")){
 					beta = Double.parseDouble(optval);
@@ -197,11 +199,11 @@ public class ModelNew {
 		}
 		return true;
 	}
-	
-    /**
-     * read the tassign file 
-     * Tassignfile����ð��ǰ��ʾ�ôʵ�id��ð�ź��ʾ�ôʶ�Ӧ��topic
-     */
+
+	/**
+	 * read the tassign file
+	 * Tassignfile——冒号前表示该词的id。冒号后表示该词对应的topic
+	 */
 	protected boolean readTAssignFile(String tassignFile){
 		try {
 			int i,j;
@@ -209,9 +211,9 @@ public class ModelNew {
 					new FileInputStream(tassignFile), "UTF-8"));
 
 			String line;
-			z = new Vector[M];			
+			z = new Vector[M];
 			data = new LDADataset(M);
-			data.V = V;			
+			data.V = V;
 			for (i = 0; i < M; i++){
 				line = reader.readLine();
 				StringTokenizer tknr = new StringTokenizer(line, " \t\r\n");
@@ -284,11 +286,11 @@ public class ModelNew {
 
 		try{
 			BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-			
+
 			//write docs with topic assignments for words
-			for (i = 0; i < data.M; i++){    //M����document size
+			for (i = 0; i < data.M; i++){    //M——document size
 				for (j = 0; j < data.docs[i].length; ++j){
-					writer.write(data.docs[i].words[j] + ":" + z[i].get(j)+"	");					
+					writer.write(data.docs[i].words[j] + ":" + z[i].get(j)+"	");
 				}
 				writer.write("\n");
 			}
@@ -305,7 +307,7 @@ public class ModelNew {
 
 	/**
 	 * Save theta (topic distribution) for this model
-	 * document��Ӧ��ͬtopic�µ���������
+	 * document对应不同topic下的条件概率
 	 */
 	public boolean saveModelTheta(String filename){
 		try{
@@ -328,7 +330,7 @@ public class ModelNew {
 
 	/**
 	 * Save word-topic distribution
-	 * word��Ӧ��ͬtopic�µ���������
+	 * word对应不同topic下的条件概率
 	 */
 	public boolean saveModelPhi(String filename){
 		try {
@@ -376,14 +378,14 @@ public class ModelNew {
 
 	/**
 	 * Save model the most likely words for each topic
-	 * ����ÿ��topic�¶�Ӧ����ߵ�word
+	 * 保存每个topic下对应性最高的word
 	 */
 	public boolean saveModelTwords(String filename){
 		try{
 			//			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
 			//					new FileOutputStream(filename), "UTF-8"));
 
-			File outfile = new File(filename);		
+			File outfile = new File(filename);
 			BufferedWriter writer = new BufferedWriter(new FileWriter(outfile));
 
 			if (twords > V){
@@ -391,25 +393,25 @@ public class ModelNew {
 			}
 
 			for (int k = 0; k < K; k++){
-				ArrayList<Pair> wordsProbsList = new ArrayList<Pair>(); 
+				ArrayList<Pair> wordsProbsList = new ArrayList<Pair>();
 				for (int w = 0; w < V; w++){
 					Pair p = new Pair(w, phi[k][w], false);
 
 					wordsProbsList.add(p);
 				}//end foreach word
 
-				//print topic				
+				//print topic
 				writer.write("Topic " + k + "th:\r\n");
-				Collections.sort(wordsProbsList);//����
+				Collections.sort(wordsProbsList);//排序
 
 				for (int i = 0; i < twords; i++){
 					if (data.localDict.contains((Integer)wordsProbsList.get(i).first)){
 						String word = data.localDict.getWord((Integer)wordsProbsList.get(i).first);
 
-						writer.write("��������" + word + " " + df.format(wordsProbsList.get(i).second) + "\r\n");
+						writer.write("————" + word + " " + df.format(wordsProbsList.get(i).second) + "\r\n");
 					}
 				}
-			} //end foreach topic			
+			} //end foreach topic
 
 			writer.close();
 		}
@@ -429,7 +431,7 @@ public class ModelNew {
 			return false;
 		}
 
-		if (!saveModelOthers(dir + File.separator + modelName + othersSuffix)){			
+		if (!saveModelOthers(dir + File.separator + modelName + othersSuffix)){
 			return false;
 		}
 
@@ -460,7 +462,7 @@ public class ModelNew {
 	/**
 	 * initialize the model
 	 */
-	public void init(String modelName1, int topicNum, double alpha1, double beta1, String trainingModelDir, String trDataFile){		
+	public void init(String modelName1, int topicNum, double alpha1, double beta1, String trainingModelDir, String trDataFile){
 
 		modelName = modelName1;
 		K = topicNum;
@@ -472,20 +474,20 @@ public class ModelNew {
 		if (beta1 >= 0)
 			beta = beta1;
 
-		niters = 2000;  /*��������*/
+		niters = 2000;  /*迭代次数*/
 
 		dir = trainingModelDir;
 		if (dir.endsWith(File.separator))
 			dir = dir.substring(0, dir.length() - 1);
 
 		dfile = trDataFile;
-		twords = 50;   /*ÿ��topic���������ǿ�Ĵʵ�����*/
+		twords = 50;   /*每个topic下相关性最强的词的数量*/
 		wordMapFile = "wordmap.txt";
 
 	}
 
-	/*	
-	protected boolean init(LDACmdOption option){		
+	/*
+	protected boolean init(LDACmdOption option){
 		if (option == null)
 			return false;
 
@@ -520,16 +522,16 @@ public class ModelNew {
 	public void initNewModelForEstimation(String trResultDir, String trDataFilePath){
 		//		if (!init(option))
 		//			return false;
-        //  trDataFilePath��ʾѵ�����ݼ���λ�ã�trResultDir��ʾ��������·��
-		int m, n, w, k;		
-		p = new double[K];		
+		//  trDataFilePath表示训练数据集的位置，trResultDir表示结果保存的路径
+		int m, n, w, k;
+		p = new double[K];
 
 		data = LDADataset.readDataSet(trDataFilePath);
 		if (data == null){
 			System.out.println("Fail to read training data!\n");
 		}
 
-		//+ allocate memory and assign values for variables		
+		//+ allocate memory and assign values for variables
 		M = data.M;
 		V = data.V;
 		dir = trResultDir;
@@ -539,34 +541,34 @@ public class ModelNew {
 		// alpha, beta: from command line or default values
 		// niters, savestep: from command line or default values
 
-		nw = new int[V][K];    /*word i(��id��ʽ��ʾ) �Ƿ�����topic k����ʾ0,1*/
+		nw = new int[V][K];    /*word i(以id形式表示) 是否属于topic k，表示0,1*/
 		for (w = 0; w < V; w++){
 			for (k = 0; k < K; k++){
-				nw[w][k] = 0;  
+				nw[w][k] = 0;
 			}
 		}
 
-		nd = new int[M][K];     /*document j������topic k��word������*/
+		nd = new int[M][K];     /*document j中属于topic k的word的数量*/
 		for (m = 0; m < M; m++){
 			for (k = 0; k < K; k++){
-				nd[m][k] = 0;  
+				nd[m][k] = 0;
 			}
 		}
 
-		nwsum = new int[K];    /*ÿ��topic��Ӧ��word������*/
+		nwsum = new int[K];    /*每个topic对应的word的数量*/
 		for (k = 0; k < K; k++){
 			nwsum[k] = 0;
 		}
 
-		ndsum = new int[M];    /*ÿ��document��word������*/
+		ndsum = new int[M];    /*每个document中word的数量*/
 		for (m = 0; m < M; m++){
 			ndsum[m] = 0;
 		}
 
 		z = new Vector[M];
 		for (m = 0; m < data.M; m++){
-			int N = data.docs[m].length; /*��Ӧ�ĵ���word������*/
-			z[m] = new Vector<Integer>(); /*һ����ʱ��������������ɵ�topic��*/
+			int N = data.docs[m].length; /*对应文档的word的数量*/
+			z[m] = new Vector<Integer>(); /*一个临时集，保存随机生成的topic号*/
 
 			//initilize for z
 			for (n = 0; n < N; n++)
@@ -585,7 +587,7 @@ public class ModelNew {
 			ndsum[m] = N;
 		}
 
-		theta = new double[M][K];		
+		theta = new double[M][K];
 		phi = new double[K][V];
 
 	}
@@ -602,7 +604,7 @@ public class ModelNew {
 
 		K = trnModel.K;
 		alpha = trnModel.alpha;
-		beta = trnModel.beta;	
+		beta = trnModel.beta;
 		modelName = "queryDataModel";
 
 		p = new double[K];
@@ -667,7 +669,7 @@ public class ModelNew {
 			ndsum[m] = N;
 		}
 
-		theta = new double[M][K];		
+		theta = new double[M][K];
 		phi = new double[K][V];
 
 		return true;
@@ -677,20 +679,20 @@ public class ModelNew {
 	 * Init parameters for inference
 	 * reading new dataset from file
 
-	public boolean initNewModel(LDACmdOption option, Model trnModel){
-//		if (!init(option))
-//			return false;
+	 public boolean initNewModel(LDACmdOption option, Model trnModel){
+	 //		if (!init(option))
+	 //			return false;
 
-		LDADataset dataset = LDADataset.readDataSet(dir + File.separator + dfile, trnModel.data.localDict);
-		if (dataset == null){
-			System.out.println("Fail to read dataset!\n");
-			return false;
-		}
+	 LDADataset dataset = LDADataset.readDataSet(dir + File.separator + dfile, trnModel.data.localDict);
+	 if (dataset == null){
+	 System.out.println("Fail to read dataset!\n");
+	 return false;
+	 }
 
-		return initNewModel(option, dataset , trnModel);
-	}
+	 return initNewModel(option, dataset , trnModel);
+	 }
 	 */
-	
+
 	/**
 	 * init parameter for continue estimating or for later inference
 	 */
@@ -713,7 +715,7 @@ public class ModelNew {
 		System.out.println("\tbeta:" + beta);
 		System.out.println("\tM:" + M);
 		System.out.println("\tV:" + V);		
-		 */		
+		 */
 		nw = new int[V][K];
 		for (w = 0; w < V; w++){
 			for (k = 0; k < K; k++){
@@ -751,7 +753,7 @@ public class ModelNew {
 				// number of words in document i assigned to topic j
 				nd[m][topic] += 1;
 				// total number of words assigned to topic j
-				nwsum[topic] += 1;	    		
+				nwsum[topic] += 1;
 			}
 			// total number of words in document i
 			ndsum[m] = N;

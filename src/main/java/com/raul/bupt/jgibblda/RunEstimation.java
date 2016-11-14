@@ -28,17 +28,36 @@
 
 package com.raul.bupt.jgibblda;
 
+import com.sun.javafx.Logging;
+import org.apache.log4j.spi.LoggingEvent;
+
 import java.io.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class RunEstimation {
 	
-	String basicDir = "E:\\Program Files\\Java\\JGibbsLDA_New\\";
+	private static String basicDir = "./lda/";
+
+
+	/**
+	 * 模型训练
+	 * @param topicNum
+     */
+	public static void modelTraining(EstimatorNew estimator,int topicNum) {
+		try{
+			estimator.init(basicDir, topicNum);   //模型初始化
+			estimator.estimate();
+			System.out.println("TopicNum "+topicNum+" completed !");
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 	
 	public static void main(String args[]){
 		
 		try {
-			RunEstimation re = new RunEstimation();
 			ArrayList<Integer> topicNumList = new ArrayList<Integer>();
 			for(int i=3;i<=10;i++)
 			{
@@ -47,42 +66,19 @@ public class RunEstimation {
 			
 			for(int k = 0; k < topicNumList.size(); k++)
 			{
-				String dir = re.basicDir;
 				int topicNum = topicNumList.get(k);
 				EstimatorNew estimator = new EstimatorNew();
-				estimator.init(dir, topicNum);
+				estimator.init(basicDir, topicNum);   //模型初始化
 				estimator.estimate();
 				System.out.println("TopicNum "+topicNum+" completed !");
 			}			
 		}
-			
-			
-/*
-
-			RunEstimation re = new RunEstimation();
-			String [] idList = re.getArticleIdList(re.basicDir+"ID.txt");
-			for(int j = 31; j <= 50; j++)
-			{			
-				for(int i = 0; i < idList.length; i++)
-				{
-					String dir = re.basicDir + "newContent/" + idList[i] + "/";
-//					File dic = new File(dir);
-//					boolean flagDic = dic.mkdir();
-					int topicNum = j;
-					EstimatorNew estimator = new EstimatorNew();
-					estimator.init(dir, topicNum);
-					estimator.estimate();
-					System.out.println("TopicNum "+j+" : Finishing query "+i+" ...");
-				}					
-			}
-		}
-*/		
 		catch(Exception e){
 			System.out.println("Error in main: " + e.getMessage());
 			e.printStackTrace();
 			return;
 		}
-	
+
 
 	}
 	

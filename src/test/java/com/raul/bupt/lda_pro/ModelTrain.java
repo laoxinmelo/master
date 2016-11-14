@@ -1,5 +1,7 @@
-package com.raul.bupt.lda_pre;
+package com.raul.bupt.lda_pro;
 
+import com.raul.bupt.jgibblda.EstimatorNew;
+import com.raul.bupt.jgibblda.RunEstimation;
 import com.raul.bupt.segment.WordParticiple;
 import com.raul.bupt.segment.impl.WordParticipleImpl;
 
@@ -10,12 +12,14 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/11/14.
  */
-public class SentencePre {
+public class ModelTrain {
 
     //分词工具
     private static final WordParticiple wordParticiple = new WordParticipleImpl();
     //reply文件名
     private static final String reply = "reply";
+    //LDA模型构建对象
+    private static final EstimatorNew estimator = new EstimatorNew();
 
 
     /**
@@ -72,9 +76,11 @@ public class SentencePre {
 
     public static void main(String[] args) {
 
-        getReplySegment();
+        for (int i = 10; i < 15; i++) {
+            RunEstimation.modelTraining(estimator, i);
+            System.out.println("______________________________________");
+        }
+
     }
-
-
 
 }

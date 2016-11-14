@@ -613,7 +613,7 @@ public class TextIO{
 	{
 		
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					new FileInputStream(twordFilePath), "GBK"));
+					new FileInputStream(twordFilePath), "utf-8"));
 			
 			File outfile = new File(newTWordFilePath);		
 			BufferedWriter writer = new BufferedWriter(new FileWriter(outfile));

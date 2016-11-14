@@ -32,36 +32,22 @@ import java.io.*;
 
 public class EstimatorNew {
 	
-	// output model
 	protected ModelNew trnModel;
 	
 	
-	
-//	LDACmdOption option;
-	
+
 	public boolean init(String basicDir, int topicNum){
-//		String trainingModelDir = "G:/Project/workspace/measures1/data/KDDCUP2005-2012/QueryData/000-1967+shelby+mustang/CalResult/LDA";
-//		this.option = option;
-//		String trDataFile = "articesBlank.txt";
+
+
 		trnModel = new ModelNew();
-    	File dicFile = new File(basicDir+topicNum+"/");
+    	File dicFile = new File(basicDir + "/result/" + topicNum+"/");
 		boolean flagDic = dicFile.mkdir();
-		String trModelDir = basicDir + topicNum + "/";
+		String trModelDir = basicDir + "/result/" + topicNum + "/";
 		String trDataFileName = "articlesTraining.txt";
 		String wordMapFileName = "wordMap.txt";
 		trnModel.init("LDATEST", topicNum, 50.0/topicNum, 0.1, trModelDir, trDataFileName);
 		trnModel.initNewModelForEstimation(trModelDir,basicDir+trDataFileName);
 		trnModel.data.localDict.writeWordMap(trModelDir + File.separator + wordMapFileName);
-		
-//		if (option.est){
-//			if (!trnModel.initNewModel(option))
-//				return false;
-//			trnModel.data.localDict.writeWordMap(trainingModelDir + File.separator + trnModel.wordMapFile);
-//		}
-//		else if (option.estc){
-//			if (!trnModel.initEstimatedModel(option))
-//				return false;
-//		}
 		
 		return true;
 	}
@@ -93,8 +79,8 @@ public class EstimatorNew {
 			}
 		}// end iterations		
 		
-		System.out.println("Gibbs sampling completed!\n");
-		System.out.println("Saving the final model!\n");
+		System.out.println("Gibbs sampling completed!");
+		System.out.println("Saving the final model!");
 		computeTheta();
 		computePhi();
 		trnModel.liter--;

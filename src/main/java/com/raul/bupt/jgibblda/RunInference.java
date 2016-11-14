@@ -34,7 +34,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-//import org.kohsuke.args4j.*;
 
 public class RunInference {
 	
@@ -42,11 +41,8 @@ public class RunInference {
 				
 		try 
 		{
-			String basicDir = "E:\\Program Files\\Java\\JGibbsLDA_New\\5\\";			
-
-			RunInference ri = new RunInference();
+			String basicDir = "E:\\Program Files\\Java\\JGibbsLDA_New\\5\\";
 			TextIO io = new TextIO();
-			
 			String modelDir = basicDir;
 			InferencerNew inferencer = new InferencerNew();
 			inferencer.init(modelDir);
@@ -57,47 +53,6 @@ public class RunInference {
 
 			
 			ModelNew newModel = inferencer.inference(newData, modelDir);
-			
-
-			/*
-			String queryTermFilePath = basicDir+"QueryTermsStemming.txt";
-			String queryListFilePath = basicDir+"queries.txt";			
-			ArrayList queryTermList = ri.getAllQueryTermsStemming(queryTermFilePath);
-			String [] queryList = ri.getQueryList(queryListFilePath);
-			
-			
-			for(int m = 10; m <= 30; m = m+10)
-			{			
-				for(int n = 0; n < queryList.length; n++)
-				{
-					String basicDir2 = basicDir + "QueryData/" + queryList[n] + "/CalResult/LDA/";
-					String modelDir = basicDir + "QueryData/" + queryList[n] + "/CalResult/LDA/"+m+"/";
-//					String dataFilePath = basicDir2+"articesBlank.txt";
-					InferencerNew inferencer = new InferencerNew();
-					inferencer.init(modelDir);
-//					String [] newData = io.readFromNewFiles2(dataFilePath);
-
-					String queryTerms = (String)queryTermList.get(n);
-					String [] queries = new String[1];
-					queries[0] = queryTerms;
-					ModelNew newModel = inferencer.inference(queries, modelDir);
-//					ModelNew newModel = inferencer.inference(newData, modelDir);
-					System.out.println("Inferring: TopicNum "+m+" : Finishing query "+n+" ...");
-*/					
-/*			
-					for (int i = 0; i < newModel.phi.length; ++i)
-					{
-					//phi: K * V
-						System.out.println("-----------------------\ntopic" + i  + " : ");
-						for (int j = 0; j < 10; ++j)
-						{
-							System.out.println(inferencer.globalDict.id2word.get(j) + "\t" + newModel.phi[i][j]);
-						}
-					}
-					
-				}
-			}
-			*/	
 		}
 		catch (Exception e){
 			System.out.println("Error in main: " + e.getMessage());
