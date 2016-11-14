@@ -238,7 +238,21 @@ public class DBProcess {
     public static void main(String[] args) throws Exception{
 
 
-        RedisSaveSegmentWithPos();
+        String sql = "select itemId,reviewId,content from reply";
+        ResultSet resultSet = dbTool.query(sql);
+
+        int count = 1;
+        while(resultSet.next()) {
+            String itemId = resultSet.getString(1);
+            String reviewId = resultSet.getString(2);
+            String reply = resultSet.getString(3);
+
+            System.out.println(count + "    " + itemId + "  " + reviewId + "    " + reply);
+            redisTool.setValue(3,count+"_"+itemId+"_"+reviewId,wordParticiple.wordSegment(reply,false) + "\r\n" + wordParticiple.wordSegmentWithoutStopWord(reply));
+            System.out.println("_______________________________________");
+
+            count += 1;
+        }
 
 //        for(int i=3;i<=3;i++) {
 //            try {
