@@ -36,22 +36,55 @@ import java.util.ArrayList;
 
 
 public class RunInference {
+
+
+	/**
+	 * 计算得到对应模型下的主题向量
+	 * @param wordVec
+	 * @return
+     */
+	public static String getDocTheta(InferencerNew inferencer,String wordVec) {
+
+		String theta = "";
+        try {
+
+			ModelNew modelNew = inferencer.inference(new String[]{wordVec}, inferencer.trnModel.dir);
+			double[] thetaArray = modelNew.theta[0];
+			for(double value:thetaArray) {
+				theta += String.valueOf(value) + " ";
+			}
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return theta;
+	}
+
+	/**
+	 * 模型初始化
+	 * @param modelPath
+	 * @return
+     */
+	public static InferencerNew modelInit(String modelPath) {
+		InferencerNew inferencer = new InferencerNew();
+		inferencer.init(modelPath);
+
+		return inferencer;
+	}
 	
 	public static void main(String args[]){
 				
 		try 
 		{
-			String basicDir = "E:\\Program Files\\Java\\JGibbsLDA_New\\5\\";
+			String basicDir = "E:\\Project\\JavaProject\\master\\lda\\model\\";
 			TextIO io = new TextIO();
 			String modelDir = basicDir;
 			InferencerNew inferencer = new InferencerNew();
 			inferencer.init(modelDir);
 			
 			String dataFilePath = basicDir+"test.txt";
-			
 			String [] newData = io.readFromNewFiles(dataFilePath);
 
-			
 			ModelNew newModel = inferencer.inference(newData, modelDir);
 		}
 		catch (Exception e){

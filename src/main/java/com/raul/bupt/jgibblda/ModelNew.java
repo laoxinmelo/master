@@ -608,7 +608,7 @@ public class ModelNew {
 		modelName = "queryDataModel";
 
 		p = new double[K];
-		System.out.println("K:" + K);
+//		System.out.println("K:" + K);
 
 		data = newData;
 
@@ -617,8 +617,8 @@ public class ModelNew {
 		V = data.V;
 		dir = modelDir;
 		savestep = 200;
-		System.out.println("M:" + M);
-		System.out.println("V:" + V);
+//		System.out.println("M:" + M);
+//		System.out.println("V:" + V);
 
 		// K: from command line or default value
 		// alpha, beta: from command line or default values

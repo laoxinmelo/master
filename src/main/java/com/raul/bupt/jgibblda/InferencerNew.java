@@ -81,7 +81,7 @@ public class InferencerNew {
 	
 	//inference new model ~ getting data from a specified dataset
 	public ModelNew inference(LDADataset newData, String modelDir)throws IOException{
-		System.out.println("init new model");
+//		System.out.println("init new model");
 		ModelNew newModel = new ModelNew();		
 		
 		newModel.initNewModel(modelDir, newData, trnModel);		
@@ -108,7 +108,7 @@ public class InferencerNew {
 		computeNewTheta();
 		computeNewPhi();
 		newModel.liter--;
-		newModel.saveModel(newModel.dfile + "." + newModel.modelName);	
+//		newModel.saveModel(newModel.dfile + "." + newModel.modelName);
 		return this.newModel;
 	}
 	
