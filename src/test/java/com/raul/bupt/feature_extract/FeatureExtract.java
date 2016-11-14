@@ -71,6 +71,8 @@ public class FeatureExtract {
                             System.out.println(itemId + "   " + reviewId + "    " + totalCount + "  " + dbIndex);
                         } catch (OutOfMemoryError e) {
                             memoryWriter.write(itemId + "\t" + reviewId + "\t" +  contentArray[2] + "\r\n");
+                        } catch (Exception e) {
+                            memoryWriter.write(itemId + "\t" + reviewId + "\t" +  contentArray[2] + "\r\n");
                         }
                     } else {
                            reviewWriter.write(itemId + "\t" + reviewId + "\r\n");
@@ -82,6 +84,7 @@ public class FeatureExtract {
 
             /**
              * 保存细粒度特征提取结果
+             * 存放位置为result/feature
              * 格式为：数量 + RelationDO
              */
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("result/feature/" + itemId));
