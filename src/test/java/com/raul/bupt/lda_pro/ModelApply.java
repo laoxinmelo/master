@@ -5,6 +5,9 @@ import com.raul.bupt.db.impl.RedisToolImpl;
 import com.raul.bupt.jgibblda.InferencerNew;
 import com.raul.bupt.jgibblda.RunInference;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Set;
 
 /**
@@ -31,13 +34,31 @@ public class ModelApply {
         Set keys = redisTool.getKeys(dbIndex);
         InferencerNew inferencer = RunInference.modelInit(modelPath);
 
-        for(Object key:keys) {
-            String reviewId = String.valueOf(key);
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter("lda/predict.txt"));
 
-            String totalContent = redisTool.getValue(dbIndex,reviewId);
-            String reply = totalContent.split(split)[1];
+            int count = 1;
+            for (Object key : keys) {
+                String keyStr = String.valueOf(key);
+                String reviewId = keyStr.substring(keyStr.lastIndexOf("_")+1);
 
-            System.out.println(reviewId + "\t" + RunInference.getDocTheta(inferencer,reply));
+                String[] totalContent = redisTool.getValue(dbIndex, keyStr).split(split);
+
+                String reply = "";
+                if(totalContent.length == 1) {
+                    reply = totalContent[0];
+                }else {
+                    reply = totalContent[1];
+                }
+                System.out.println(reply);
+                System.out.println(count + "__________________________________");
+                bw.write(reviewId + "\t" + RunInference.getDocTheta(inferencer, reply) + "\r\n");
+                count += 1;
+            }
+
+            bw.flush(); bw.close();
+        }catch(IOException e) {
+            e.printStackTrace();
         }
 
     }
