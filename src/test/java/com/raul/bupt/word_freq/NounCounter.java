@@ -30,7 +30,7 @@ public class NounCounter {
      * 并且保存在redis库中（4）
      * @return
      */
-    public void WordFreqCount() {
+    public static void WordFreqCount() {
 
         Map<String,Integer> wordMap = new HashMap<String, Integer>();
 
@@ -72,6 +72,6 @@ public class NounCounter {
     }
 
     public static void main(String[] args) {
-        new NounCounter().WordFreqCount();
+//        WordFreqCount();
     }
 }
