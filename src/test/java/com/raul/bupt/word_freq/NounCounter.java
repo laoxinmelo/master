@@ -2,10 +2,10 @@ package com.raul.bupt.word_freq;
 
 import com.raul.bupt.db.RedisTool;
 import com.raul.bupt.db.impl.RedisToolImpl;
+import com.raul.bupt.parser.dataobject.RelationDO;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 /**
  * Created by Administrator on 2016/11/15.
@@ -27,12 +27,12 @@ public class NounCounter {
 
     /**
      * 对初始评论和追加评论中的所有名词进行统计
-     * 并且保存在redis库中（4）
      * @return
      */
-    public static void WordFreqCount() {
+    private static Map WordFreqCount() {
 
-        Map<String,Integer> wordMap = new HashMap<String, Integer>();
+        //每个词对应一个hashMap.该hashMap表示该词以各类词性在语料中的出现次数
+        Map<String,HashMap<String,Integer>> wordMap = new HashMap<String, HashMap<String,Integer>>();
 
         Set<String> itemIdSet = redisTool.getKeys(0);
         for(String itemId : itemIdSet) {
@@ -50,28 +50,97 @@ public class NounCounter {
                         for(String wordUnit:wordUnitArray) {
                             String word = wordUnit.substring(0,wordUnit.lastIndexOf(unitSplit));
                             String POS = wordUnit.substring(wordUnit.lastIndexOf(unitSplit)+1);
-                            if(POS.equals(nounIndex)) {
-                                if(wordMap.containsKey(word)) {
-                                    wordMap.put(word,wordMap.get(word)+1);
+
+                            HashMap<String,Integer> freqMap = null;
+                            if(wordMap.containsKey(word)) {
+                                freqMap = wordMap.get(word);
+                                if(freqMap.containsKey(POS)) {
+                                    freqMap.put(POS,freqMap.get(POS) + 1);
                                 }else {
-                                    wordMap.put(word,1);
+                                    freqMap.put(POS,1);
                                 }
+                            }else {
+                                freqMap = new HashMap<String, Integer>();
+                                freqMap.put(POS,1);
                             }
+                            wordMap.put(word,freqMap);
+
                         }
                     }
 
                 }
             }
         }
+        return wordMap;
+    }
 
-        Set<String> wordSet = wordMap.keySet();
-        for(String word : wordSet) {
-            Integer freq = wordMap.get(word);
-            redisTool.setValue(4,word,String.valueOf(freq));
+
+    /**
+     * 从所提取的语义关系中获取名词，并保存在Set当中
+     * 逐一获取其在所有评论中的词频
+     */
+    private static void getAttributeFreq(Map<String,Map<String,Integer>> wordMap) {
+        String filePath = "./result/feature/";
+        List<String> wordList = new ArrayList<String>();
+
+        try {
+        for(File file : new File(filePath).listFiles()) {
+            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file.getAbsolutePath()));
+            Integer featureNum = objectInputStream.readInt();
+            for(int i=0;i<featureNum;i++) {
+                RelationDO relationDO = (RelationDO) objectInputStream.readObject();
+
+                String depWord = relationDO.getDepWordDO().getWord();
+                String depPos = relationDO.getDepWordDO().getPos();
+
+                String govWord = relationDO.getGovWordDO().getWord();
+                String govPos = relationDO.getGovWordDO().getPos();
+
+                if(depPos.equals(nounIndex) && (!wordList.contains(depWord))) {
+                    wordList.add(depWord);
+                }
+                if(govPos.equals(nounIndex) && (!wordList.contains(govWord))) {
+                    wordList.add(govWord);
+                }
+            }
+        }
+        }catch(Exception e){
+                e.printStackTrace();
+        }
+
+        //保存词频结果
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter("result/candAttribute.txt"));
+            for (String word : wordList) {
+                Map<String,Integer> freqMap = wordMap.get(word);
+
+                int totalCount = 0;
+                int nnCount = 0;
+                 try {
+                     for (String POS : freqMap.keySet()) {
+                         int tempCount = freqMap.get(POS);
+
+                         totalCount += tempCount;
+                         if (POS.equals(nounIndex)) {
+                             nnCount += tempCount;
+                         }
+                     }
+                 }catch(NullPointerException e) {
+                     System.out.println(word);
+                     e.printStackTrace();
+                 }
+
+                bw.write(word + "\t" + nnCount + "\t" + totalCount + "\r\n");
+            }
+            bw.flush();
+            bw.close();
+        }catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     public static void main(String[] args) {
-//        WordFreqCount();
+
+        getAttributeFreq(WordFreqCount());
     }
 }

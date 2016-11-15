@@ -11,12 +11,12 @@
 
 
     <dependencies>
-        <!--分词工具依赖-->
-        <dependency>
-            <groupId>com.huaban</groupId>
-            <artifactId>jieba-analysis</artifactId>
-            <version>1.0.2</version>
-        </dependency>
+        <!--&lt;!&ndash;分词工具依赖&ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>com.huaban</groupId>-->
+            <!--<artifactId>jieba-analysis</artifactId>-->
+            <!--<version>1.0.2</version>-->
+        <!--</dependency>-->
 
         <!--用来进行日志记录-->
         <dependency>
@@ -54,27 +54,42 @@
             <version>4.7</version>
         </dependency>
 
-
-        <!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-core -->
         <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-core</artifactId>
-            <version>2.4.0</version>
+            <groupId>org.ansj</groupId>
+            <artifactId>tree_split</artifactId>
+            <version>1.0.1</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/args4j/args4j -->
+        <!-- https://mvnrepository.com/artifact/org.ansj/ansj_seg -->
         <dependency>
-            <groupId>args4j</groupId>
-            <artifactId>args4j</artifactId>
-            <version>2.0.27</version>
+            <groupId>org.ansj</groupId>
+            <artifactId>ansj_seg</artifactId>
+            <version>0.9</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-        </dependency>
+
+
+
+        <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.apache.lucene/lucene-core &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.lucene</groupId>-->
+            <!--<artifactId>lucene-core</artifactId>-->
+            <!--<version>2.4.0</version>-->
+        <!--</dependency>-->
+
+        <!--&lt;!&ndash; https://mvnrepository.com/artifact/args4j/args4j &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>args4j</groupId>-->
+            <!--<artifactId>args4j</artifactId>-->
+            <!--<version>2.0.27</version>-->
+        <!--</dependency>-->
+
+        <!--&lt;!&ndash; https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>javax.servlet</groupId>-->
+            <!--<artifactId>javax.servlet-api</artifactId>-->
+            <!--<version>3.1.0</version>-->
+        <!--</dependency>-->
 
 
 
