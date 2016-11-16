@@ -89,14 +89,9 @@ public class DistanceQuery {
 			i = in.nextInt();
 
 			System.out.println("！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
-
 		}
 		System.out.println("！！！！！！潤崩！！！！！！！！");
-
 		in.close();
-
-
-
 	}
 
 
