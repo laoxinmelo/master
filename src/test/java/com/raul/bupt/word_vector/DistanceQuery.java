@@ -29,7 +29,6 @@ public class DistanceQuery {
      */
 	private static void SimiWordQuery(Word2VEC vec) {
 
-
 		int i = 1; //作为是否继续查询的标注
 		int j; //作为是否保存的标注
 
