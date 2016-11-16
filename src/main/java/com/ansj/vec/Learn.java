@@ -31,7 +31,7 @@ public class Learn {
 	/**
 	 * 训练多少个特征
 	 */
-	public int layerSize = 50;//表示特征数，隐藏层的节点
+	public int layerSize = 100;//表示特征数，隐藏层的节点
 
 	/**
 	 * 上下文窗口大小
@@ -51,6 +51,8 @@ public class Learn {
 	private int trainWordsCount = 0;//训练的单词总数
 
 	private int MAX_EXP = 6;//最小计算到f-6，最大计算到f+6
+
+	private static final String vocabularyPath = "library/vocabulary/";
 
 	public Learn(Boolean isCbow, Integer layerSize, Integer window, Double alpha, Double sample) {
 		createExpTable();
@@ -347,7 +349,7 @@ public class Learn {
 		//同时建立词表，并按照降序的顺序排列
 		String name = file.getName();
 		name = name.substring(0, name.lastIndexOf("."));
-		BufferedWriter bw = new BufferedWriter(new FileWriter("result/vocabulary_" + name + ".txt"));
+		BufferedWriter bw = new BufferedWriter(new FileWriter( vocabularyPath + name + ".txt"));
 		for (Map.Entry<String, Integer> element : sort(mc.get())) {
 			wordMap.put(element.getKey(), new WordNeuron(element.getKey(), element.getValue(),
 					layerSize));
