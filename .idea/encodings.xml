@@ -3,7 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/corpus/neg/Negation.txt" charset="GBK" />
     <file url="file://$PROJECT_DIR$/corpus/stopword/中文停用词表.txt" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/result/query_result/2015-04-04-11-22-11_胡锦涛.txt" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/src/main/java/com/ansj/vec/application/DistanceQuery.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/ansj/vec/application/DistanceQuery.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/test/java/com/raul/bupt/word_vector/DistanceQuery.java" charset="GBK" />
   </component>
 </project>

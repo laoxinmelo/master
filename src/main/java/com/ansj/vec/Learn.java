@@ -325,7 +325,6 @@ public class Learn {
 			String temp = null;
 			while ((temp = br.readLine()) != null)
 			{
-				//System.err.println(temp);
 				String[] split = temp.split(" ");
 				trainWordsCount += split.length;
 				for (String string : split)
