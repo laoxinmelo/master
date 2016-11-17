@@ -22,6 +22,7 @@ public class VectorProcess implements Process{
     //候选属性词及其对应的词频
     private static final Map<String,Integer> wordMap = getFeatureWordFreq();
 
+
     private static Map<String,Integer> getFeatureWordFreq() {
         Map<String,Integer> wordFreqMap = new HashMap<String,Integer>();
         try {
