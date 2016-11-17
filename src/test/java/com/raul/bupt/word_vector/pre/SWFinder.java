@@ -4,17 +4,17 @@ import com.ansj.vec.Word2VEC;
 import com.ansj.vec.domain.WordEntry;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Administrator on 2016/11/17.
  */
 public class SWFinder {
 
-    private static final String positiveWordPath = "corpus/sentiment/ntusd/positive.txt"; //正向情感词保存路径
-    private static final String negativeWordPath = "corpus/sentiment/ntusd/negative.txt"; //负向情感词保存路径
+    private static final String dicType = "ntusd"; //情感词典类型
+
+    private static final String positiveWordPath = "corpus/sentiment/"+dicType+"/positive.txt"; //正向情感词保存路径
+    private static final String negativeWordPath = "corpus/sentiment/"+dicType+"/negative.txt"; //负向情感词保存路径
 
     private static final List<String> positiveWordList = getPositiveWordList();  //正向情感词词典
     private static final List<String> negativeWordList = getNegativeWordList();  //负向情感词词典
@@ -38,7 +38,7 @@ public class SWFinder {
         List<String> positiveWordList = new ArrayList<String>();
 
         try {
-            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(new File(positiveWordPath)));
+            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(new File(positiveWordPath)),"gbk");
             BufferedReader br = new BufferedReader(inputStreamReader);
 
             String temp = br.readLine();
@@ -62,7 +62,7 @@ public class SWFinder {
         List<String> negativeWordList = new ArrayList<String>();
 
         try {
-            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(new File(negativeWordPath)));
+            InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(new File(negativeWordPath)),"gbk");
             BufferedReader br = new BufferedReader(inputStreamReader);
 
             String temp = br.readLine();
@@ -76,6 +76,29 @@ public class SWFinder {
         return negativeWordList;
     }
 
+    /**
+     * 获取大连理工情感词典
+     * @return
+     */
+    private static Map<String,Double> getSentimentDict() throws Exception{
+        String filePath = "corpus/sentiment/dalian.txt";
+        InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(new File(filePath)),"gbk");
+        BufferedReader br = new BufferedReader(inputStreamReader);
+        String temp = br.readLine();
+
+        Map<String,Double> sentimentWordMap = new HashMap<String, Double>();
+        while(temp != null) {
+            String word =temp.substring(0,temp.indexOf("\t"));
+            Double value = Double.valueOf(temp.substring(temp.lastIndexOf("\t")+1));
+
+            sentimentWordMap.put(word,value);
+            temp = br.readLine();
+        }
+
+
+        return sentimentWordMap;
+    }
+
 
     /**
      * 找出隐性情感词
@@ -87,34 +110,57 @@ public class SWFinder {
             BufferedReader br = new BufferedReader(inputStreamReader);
             String temp = br.readLine();
 
+            BufferedWriter bw = new BufferedWriter(new FileWriter("result/"+dicType+"SentimentWord.txt"));
+//            BufferedWriter bw = new BufferedWriter(new FileWriter("result/dalianSentimentWord.txt"));
+//            Map<String,Double> sentimentWordMap = getSentimentDict();
 
-            BufferedWriter bw = new BufferedWriter(new FileWriter("result/ntusdSentimentWord.txt"));
             while(temp != null) {
                 temp = temp.trim();
                 String word = temp.substring(0,temp.lastIndexOf(freqSplit));
 
 
+
                 if(!word.replaceAll("[^\u4e00-\u9fa5]","").equals("")) {
                     if ((!positiveWordList.contains(word)) && (!negativeWordList.contains(word))) {
+//                     if(!sentimentWordMap.containsKey(word)) {
                         Set<WordEntry> simiWordSet = vec.distance(word);
                         float value = 0;
 
+                        int simiCount = 0;
                         for (WordEntry wordEntry : simiWordSet) {
                             String simiWord = wordEntry.name;
                             float simiValue = wordEntry.score;
+                            /**
+                             * 使用大连理工情感词典时的情感计算方法
+                             */
+//                            if(sentimentWordMap.containsKey(simiWord)) {
+//                                value += simiValue * sentimentWordMap.get(simiWord);
+//                                System.out.println(word + " " + simiWord + "    " + simiValue);
+//                                simiCount += 1;
+//                            }
 
+                            /**
+                             * 使用NTUSD情感情感词典时的情感计算方法
+                             */
                             if (positiveWordList.contains(simiWord)) {
                                 value += simiValue;
+                                simiCount += 1;
                             }
                             if (negativeWordList.contains(simiWord)) {
                                 value -= simiValue;
+                                simiCount += 1;
                             }
                         }
 
-                        if (value != 0) {
-                            System.out.println(word + " " + value);
-                            bw.write(word + "\t" + value + "\r\n");
-                        }
+//                         if(simiCount != 0) {
+//                             value = value/simiCount;
+//                         }
+                         if (value != 0) {
+                            System.out.println(word + " " + value + "   " + value/simiCount);
+                            bw.write(word + "\t" + value + "\t" + value/simiCount + "\r\n");
+                         }
+
+                        System.out.println("______________________________________");
                     }
                 }
                 temp = br.readLine();
@@ -136,6 +182,6 @@ public class SWFinder {
     public static void main(String[] args) throws Exception{
         vec.loadJavaModel(modelPath);  //模型加载
         hiddenSentimentWordFinder();
+//        getSentimentDict();
     }
-
 }

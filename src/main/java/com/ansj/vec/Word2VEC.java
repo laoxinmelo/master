@@ -72,7 +72,7 @@ public class Word2VEC {
 
 	private int words;
 	private int size;
-	private int topNSize = 20;
+	private int topNSize = 25;
 
 	/**
 	 * 加载模型
