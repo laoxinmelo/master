@@ -2,8 +2,6 @@ package com.raul.bupt.word_vector.pre;
 
 import com.ansj.vec.Word2VEC;
 import com.ansj.vec.domain.WordEntry;
-import com.raul.bupt.db.RedisTool;
-import com.raul.bupt.db.impl.RedisToolImpl;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -15,8 +13,8 @@ import java.util.Set;
  */
 public class SWFinder {
 
-    private static final String positiveWordPath = "corpus/sentiment/hownet/positive.txt"; //正向情感词保存路径
-    private static final String negativeWordPath = "corpus/sentiment/hownet/negative.txt"; //负向情感词保存路径
+    private static final String positiveWordPath = "corpus/sentiment/ntusd/positive.txt"; //正向情感词保存路径
+    private static final String negativeWordPath = "corpus/sentiment/ntusd/negative.txt"; //负向情感词保存路径
 
     private static final List<String> positiveWordList = getPositiveWordList();  //正向情感词词典
     private static final List<String> negativeWordList = getNegativeWordList();  //负向情感词词典
@@ -29,9 +27,6 @@ public class SWFinder {
 
     //word2vec模型工具
     private static final Word2VEC vec = new Word2VEC();
-
-    private static final double posThreshold = 0.1;
-    private static final double negThreshold = -0.1;
 
 
     /**
@@ -93,7 +88,7 @@ public class SWFinder {
             String temp = br.readLine();
 
 
-            BufferedWriter bw = new BufferedWriter(new FileWriter("result/hownetSentimentWord.txt"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("result/ntusdSentimentWord.txt"));
             while(temp != null) {
                 temp = temp.trim();
                 String word = temp.substring(0,temp.lastIndexOf(freqSplit));
