@@ -1,4 +1,4 @@
-package com.raul.bupt.word_vector;
+package com.raul.bupt.word_vector.pre;
 
 import com.raul.bupt.db.RedisTool;
 import com.raul.bupt.db.impl.RedisToolImpl;

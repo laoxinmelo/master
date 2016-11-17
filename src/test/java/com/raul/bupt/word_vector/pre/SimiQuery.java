@@ -1,4 +1,4 @@
-package com.raul.bupt.word_vector;
+package com.raul.bupt.word_vector.pre;
 
 import com.ansj.vec.Word2VEC;
 

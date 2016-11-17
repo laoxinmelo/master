@@ -5,9 +5,7 @@ import com.cluster.hierarchical.ClusterTool;
 import com.cluster.hierarchical.impl.ClusterToolImpl;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,7 +26,7 @@ public class ClusterPro {
     private static final String attributePath = "result\\originAttribute.txt";
 
     //阈值
-    private static final float threshold = Float.valueOf("0.30");
+    private static final float threshold = Float.valueOf("0.4");
 
     /**
      * 加载模型
