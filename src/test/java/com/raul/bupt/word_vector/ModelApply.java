@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
+ * 进行Word2vec模型训练
  * Created by Administrator on 2016/11/16.
  */
 public class ModelApply {

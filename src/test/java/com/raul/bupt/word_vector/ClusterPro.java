@@ -9,8 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 对初始特征词进行层次聚类
  * Created by Administrator on 2016/11/16.
  */
+
 public class ClusterPro {
 
     //层次聚类工具

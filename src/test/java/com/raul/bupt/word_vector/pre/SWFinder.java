@@ -13,8 +13,9 @@ public class SWFinder {
 
     private static final String dicType = "ntusd"; //情感词典类型
 
-    private static final String positiveWordPath = "corpus/sentiment/"+dicType+"/positive.txt"; //正向情感词保存路径
-    private static final String negativeWordPath = "corpus/sentiment/"+dicType+"/negative.txt"; //负向情感词保存路径
+    private static final String positiveWordPath = "corpus/sentiment/" + dicType + "/postive.txt";
+    private static final String negativeWordPath = "corpus/sentiment/" + dicType + "/negative.txt";
+
 
     private static final List<String> positiveWordList = getPositiveWordList();  //正向情感词词典
     private static final List<String> negativeWordList = getNegativeWordList();  //负向情感词词典
@@ -34,7 +35,7 @@ public class SWFinder {
      * @return
      * @throws IOException
      */
-    private static List<String> getPositiveWordList(){
+    public static List<String> getPositiveWordList(){
         List<String> positiveWordList = new ArrayList<String>();
 
         try {
@@ -58,7 +59,7 @@ public class SWFinder {
      * @return
      * @throws IOException
      */
-    private static List<String> getNegativeWordList(){
+    public static List<String> getNegativeWordList(){
         List<String> negativeWordList = new ArrayList<String>();
 
         try {
@@ -155,10 +156,10 @@ public class SWFinder {
 //                         if(simiCount != 0) {
 //                             value = value/simiCount;
 //                         }
-                         if (value != 0) {
+                        if (value != 0) {
                             System.out.println(word + " " + value + "   " + value/simiCount);
                             bw.write(word + "\t" + value + "\t" + value/simiCount + "\r\n");
-                         }
+                        }
 
                         System.out.println("______________________________________");
                     }

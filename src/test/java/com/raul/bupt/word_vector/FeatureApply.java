@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 对于所提取的候选特征词，完成筛选过后，对初次聚类分析所得的簇进行扩充
  * Created by Administrator on 2016/11/17.
  */
+
 public class FeatureApply {
 
     //初始特征聚类结果
