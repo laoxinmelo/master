@@ -106,12 +106,8 @@ public class SentimentApply {
 
     }
 
-
     public static void main(String[] args) {
-
         sentimentWordToRedis();
-
-
     }
 
 

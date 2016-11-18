@@ -3,6 +3,8 @@ package com.raul.bupt.word_vector;
 import com.ansj.vec.Word2VEC;
 import com.cluster.hierarchical.ClusterTool;
 import com.cluster.hierarchical.impl.ClusterToolImpl;
+import com.raul.bupt.db.RedisTool;
+import com.raul.bupt.db.impl.RedisToolImpl;
 import com.raul.bupt.parser.dataobject.RelationDO;
 import com.raul.bupt.parser.dataobject.WordDO;
 
@@ -23,14 +25,24 @@ public class FeatureApply {
     private static final String vecModelPath = "library\\model\\noSwVector";
     //特征存放位置
     private static final String itemFeatureSavePath = "result/feature/";
+    //所得特征提取结果的保存位置
+    private static final String featureTableSavePath = "result/featureTable.txt";
+    //候选特征词保存位置
+    private static final String candFeatureSavePath = "result/candAttribute.txt";
+
+    //redis库操作工具
+    private static final RedisTool redisTool = new RedisToolImpl();
+
     //名词词性标注
     private static final String nounTag = "NN";
     //特征之间的分隔符
     private static final String featureSplit = "_";
+    //所提取得到特征之间的分隔符
+    private static final String tableSplit = "\t";
     //相似度阈值
     private static final double simiThreshold = 0.3;
-    //候选特征词保存位置
-    private static final String candFeatureSavePath = "result/candAttribute.txt";
+    //所提取特征在redis中的存放位置
+    private static final int featureRedisIndex = 5;
 
     //保存各个簇的特征词
     private static List<String> clusterList = getOriginFeatureCluster();
@@ -178,23 +190,54 @@ public class FeatureApply {
             clusterList.set(maxIndex, clusterList.get(maxIndex) + featureSplit + word);
             System.out.println("___________________________");
         }
+    }
 
 
+    /**
+     * 将特征保存到redis当中
+     */
+    private static void featureToRedis() {
+
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(featureTableSavePath))));
+            String temp = br.readLine();
+            int featureSize = temp.split(tableSplit).length/2;
+
+            String[] featureArray = new String[featureSize];
+            for(int i=0;i<featureSize;i++) {
+                featureArray[i] = featureSplit;
+            }
+
+            while(true) {
+                temp = br.readLine();
+                if(temp == null) {
+                    break;
+                }
+
+                String[] tempArray = temp.split(tableSplit);
+                for(int i=0;i<tempArray.length;i=i+2) {
+                    if(!tempArray[i].equals("")) {
+                        featureArray[i/2] += tempArray[i] + featureSplit;
+                    }
+                }
+
+            }
+
+            for(int i=0;i<featureSize;i++) {
+                redisTool.setValue(5,String.valueOf(i+1),featureArray[i]);
+            }
+
+            br.close();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
 
     public static void main(String[] args) throws IOException{
 
-        vec.loadJavaModel(vecModelPath);
-        candFeatureCalculate();
-        BufferedWriter bw = new BufferedWriter(new FileWriter("result/aspect-based.txt"));
-        for(String clusterStr:clusterList) {
-            clusterStr = clusterStr.replaceAll(featureSplit,"\t");
-            bw.write(clusterStr + "\r\n");
-        }
-
-        bw.flush();  bw.close();
+        featureToRedis();
     }
 
 
