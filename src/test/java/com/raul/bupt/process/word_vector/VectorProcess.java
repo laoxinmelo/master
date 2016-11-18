@@ -1,7 +1,5 @@
 package com.raul.bupt.process.word_vector;
 
-import com.raul.bupt.process.Process;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,9 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 产品细粒度特征的转换
  * Created by Administrator on 2016/11/17.
  */
-public class VectorProcess implements Process{
+public class VectorProcess{
 
     //名词词频统计结果保存路径
     private static final String freqRecordPath = "result/candAttribute.txt";
@@ -78,12 +77,6 @@ public class VectorProcess implements Process{
 
         bw.flush(); bw.close();
         br.close();
-
-    }
-
-
-
-    public void execute() {
 
     }
 }
