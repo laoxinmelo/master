@@ -19,6 +19,7 @@ public class LdaProcess{
      private static final RedisTool redisTool = new RedisToolImpl();
 
 
+
     /**
      * 获取各个商家反馈的主题向量
      * @return
