@@ -14,24 +14,24 @@ import java.io.*;
  */
 public class WordParticipleImpl  implements WordParticiple{
 
-    //å®Œæˆäº†åˆå§‹åŒ–çš„åˆ†è¯å·¥å…·
+    //Íê³ÉÁË³õÊ¼»¯µÄ·Ö´Ê¹¤¾ß
     private NLPIR nlpir = NLPIRProxy.getInstance();
-    //æ‰€æœ‰åœç”¨è¯
-    private List<String> stopWordList = getStopWordList();
-    //åœç”¨è¯å­˜æ”¾è·¯å¾„
-    private static final String stopWordPath = "./corpus/stopword/ä¸­æ–‡åœç”¨è¯è¡¨.txt";
-    //è¯å…¸å­˜æ”¾è·¯å¾„
+    //ËùÓĞÍ£ÓÃ´Ê
+    public static List<String> stopWordList = getStopWordList();
+    //Í£ÓÃ´Ê´æ·ÅÂ·¾¶
+    private static final String stopWordPath = "./corpus/stopword/ÖĞÎÄÍ£ÓÃ´Ê±í.txt";
+    //´Êµä´æ·ÅÂ·¾¶
     private static final String dictFilePath = "./corpus/dict/";
-    //æ ‡ç‚¹ç¬¦å·åœ¨ICTCLASä¸­çš„æ ‡æ³¨
+    //±êµã·ûºÅÔÚICTCLASÖĞµÄ±ê×¢
     private static final String punctuation = "w";
-    //æ–°è¯å’Œå…³é”®è¯çš„å¯¹åº”æ•°é‡
+    //ĞÂ´ÊºÍ¹Ø¼ü´ÊµÄ¶ÔÓ¦ÊıÁ¿
     private static final int wordNum = 10;
 
 
     /**
-     * å¯¹å¥å­è¿›è¡Œåˆ†è¯
+     * ¶Ô¾ä×Ó½øĞĞ·Ö´Ê
      * @param sentence
-     * @param pos  è¡¨ç¤ºæ˜¯å¦éœ€è¦è¿›è¡Œè¯æ€§æ ‡æ³¨
+     * @param pos  ±íÊ¾ÊÇ·ñĞèÒª½øĞĞ´ÊĞÔ±ê×¢
      * @return
      */
     public String wordSegment(String sentence,boolean pos) {
@@ -46,10 +46,10 @@ public class WordParticipleImpl  implements WordParticiple{
 
         try {
 
-            //å¯¹å‚¨å­˜äº†æ–‡ä»¶å†…å®¹çš„å­—ç¬¦ä¸²åˆ†è¯
+            //¶Ô´¢´æÁËÎÄ¼şÄÚÈİµÄ×Ö·û´®·Ö´Ê
             byte [] resBytes = nlpir.NLPIR_ParagraphProcess(sentence.getBytes("utf-8"), 1);
             wordSegmentResult = new String(resBytes, "utf-8").replaceAll(" +", " ").trim();
-            wordSegmentResult = delMeanless(wordSegmentResult,pos); //åˆ é™¤ä¸€äº›æ— æ•ˆå†…å®¹
+            wordSegmentResult = delMeanless(wordSegmentResult,pos); //É¾³ıÒ»Ğ©ÎŞĞ§ÄÚÈİ
 
         }catch (UnsupportedEncodingException e) {
             System.err.println("NLPIR File Encoding Error...");
@@ -60,10 +60,10 @@ public class WordParticipleImpl  implements WordParticiple{
     }
 
     /**
-     * è·å–æ‰€æœ‰åœç”¨è¯
+     * »ñÈ¡ËùÓĞÍ£ÓÃ´Ê
      * @return
      */
-    private List<String> getStopWordList() {
+     private static List<String> getStopWordList() {
         File file = new File(stopWordPath);
         List<String> stopWordList = new ArrayList<String>();
 
@@ -90,16 +90,16 @@ public class WordParticipleImpl  implements WordParticiple{
     }
 
     /**
-     * å¯¹è¾“å…¥æ–‡æœ¬è¿›è¡Œé¢„å¤„ç†
+     * ¶ÔÊäÈëÎÄ±¾½øĞĞÔ¤´¦Àí
      * @param sentence
      * @return
      */
     private String preprocess(String sentence) {
-        sentence = sentence.trim().replaceAll("(?m)^[ ã€€\r\n]+|[ ã€€]+$","").toLowerCase(); //å»æ‰å¼€å¤´å’Œç»“å°¾çš„ç©ºæ ¼ï¼Œå¹¶å°†æ‰€æœ‰å­—æ¯è½¬æ¢ä¸ºå°å†™
-        sentence = sentence.replaceAll("\\s+", " ").replaceAll("[\r\n]", "ï¼Œ");  //å»æ‰å¤šä½™çš„ç©ºæ ¼å’Œæ¢è¡Œç¬¦
+        sentence = sentence.trim().replaceAll("(?m)^[ ¡¡\r\n]+|[ ¡¡]+$","").toLowerCase(); //È¥µô¿ªÍ·ºÍ½áÎ²µÄ¿Õ¸ñ£¬²¢½«ËùÓĞ×ÖÄ¸×ª»»ÎªĞ¡Ğ´
+        sentence = sentence.replaceAll("\\s+", " ").replaceAll("[\r\n]", "£¬");  //È¥µô¶àÓàµÄ¿Õ¸ñºÍ»»ĞĞ·û
 
         try {
-            //è¿›è¡Œç¼–ç è½¬æ¢
+            //½øĞĞ±àÂë×ª»»
             byte[] bytes = sentence.getBytes("utf-8");
             sentence = new String(bytes);
         }catch(UnsupportedEncodingException e) {
@@ -109,7 +109,7 @@ public class WordParticipleImpl  implements WordParticiple{
     }
 
     /**
-     * å»æ‰æ— æ•ˆå†…å®¹ï¼Œå¦‚ç©ºæ ¼ã€Tabé”®ç­‰
+     * È¥µôÎŞĞ§ÄÚÈİ£¬Èç¿Õ¸ñ¡¢Tab¼üµÈ
      * @param sentence
      * @return
      */
@@ -135,7 +135,7 @@ public class WordParticipleImpl  implements WordParticiple{
     }
 
     /**
-     * å¯¹å¥å­è¿›è¡Œåˆ†è¯å¤„ç†ï¼Œåˆ é™¤å…¶ä¸­çš„æ ‡ç‚¹ç¬¦å·å’Œåœç”¨è¯
+     * ¶Ô¾ä×Ó½øĞĞ·Ö´Ê´¦Àí£¬É¾³ıÆäÖĞµÄ±êµã·ûºÅºÍÍ£ÓÃ´Ê
      * @param sentence
      * @return
      */
@@ -165,7 +165,7 @@ public class WordParticipleImpl  implements WordParticiple{
     }
 
     /**
-     * å°†æ–°è¯è¯å…¸å¯¼å…¥åˆ°ç”¨æˆ·è¯å…¸å½“ä¸­ï¼Œå¹¶è¿›è¡Œä¿å­˜
+     * ½«ĞÂ´Ê´Êµäµ¼Èëµ½ÓÃ»§´Êµäµ±ÖĞ£¬²¢½øĞĞ±£´æ
      * @param
      */
     public void updateUserDict() {
@@ -198,7 +198,7 @@ public class WordParticipleImpl  implements WordParticiple{
     }
 
     /**
-     * å°†æ–°è¯åŠ å…¥åˆ°ç”¨æˆ·è¯å…¸ä¸­å¹¶ä¿å­˜
+     * ½«ĞÂ´Ê¼ÓÈëµ½ÓÃ»§´ÊµäÖĞ²¢±£´æ
      * @param wordList
      */
     public void addNewWord(List wordList) {
@@ -208,7 +208,7 @@ public class WordParticipleImpl  implements WordParticiple{
     }
 
     /**
-    * æ‰¾å‡ºå¥å­ä¸­çš„å…³é”®è¯ï¼Œå¹¶å¯¼å…¥åˆ°ç”¨æˆ·è¯å…¸å½“ä¸­
+    * ÕÒ³ö¾ä×ÓÖĞµÄ¹Ø¼ü´Ê£¬²¢µ¼Èëµ½ÓÃ»§´Êµäµ±ÖĞ
     * @param sentence
     */
     public void findKeyWords(String sentence) {
@@ -230,7 +230,7 @@ public class WordParticipleImpl  implements WordParticiple{
     }
 
     /**
-     * æ‰¾å‡ºå¥å­ä¸­çš„å…³é”®è¯ï¼Œå¹¶å¯¼å…¥åˆ°ç”¨æˆ·è¯å…¸å½“ä¸­
+     * ÕÒ³ö¾ä×ÓÖĞµÄ¹Ø¼ü´Ê£¬²¢µ¼Èëµ½ÓÃ»§´Êµäµ±ÖĞ
      * @param sentence
      */
     public void findNewWords (String sentence){
@@ -270,7 +270,7 @@ public class WordParticipleImpl  implements WordParticiple{
 
 
     /**
-     * æµ‹è¯•ä¸»å‡½æ•°
+     * ²âÊÔÖ÷º¯Êı
      * @param args
      * @throws Exception
      */
