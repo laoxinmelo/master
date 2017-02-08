@@ -36,7 +36,20 @@ public class FeatureExtract {
     private static final String split = ";";
 
 
-    public static void main(String[] args) throws Exception{
+    /**
+     * 提取电子烟商品的属性特征
+     * @throws Exception
+     */
+    public static void featureExtract4Ecigar() throws Exception {
+
+    }
+
+
+    /**
+     * 提取游戏本商品的属性特征
+     * @throws Exception
+     */
+    public static void featureExtract4PC() throws Exception{
 
         Set itemIdSet = redisTool.getKeys(0);
         Iterator iterator = itemIdSet.iterator();
