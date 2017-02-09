@@ -9,10 +9,7 @@ import com.raul.bupt.parser.dataobject.RelationDO;
 import com.raul.bupt.segment.WordParticiple;
 import com.raul.bupt.segment.impl.WordParticipleImpl;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -26,6 +23,8 @@ import java.util.Set;
  */
 public class FeatureExtract {
 
+    //数据库操作工具
+    private static final DBTool dbTool = new DBToolImpl();
     //redis操作工具
     private static final RedisTool redisTool = new RedisToolImpl();
     //语义解析工具
@@ -36,11 +35,64 @@ public class FeatureExtract {
     private static final String split = ";";
 
 
+    public static void main(String[] args) throws Exception{
+        featureExtract4Ecigar();
+    }
+
     /**
      * 提取电子烟商品的属性特征
      * @throws Exception
      */
     public static void featureExtract4Ecigar() throws Exception {
+
+        //读取电子烟评论数据
+        InputStreamReader isr = new InputStreamReader(new FileInputStream(new File("corpus/taggerNote.txt")));
+        BufferedReader br = new BufferedReader(isr);
+
+        String temp = br.readLine();
+
+        String item = "";
+        List<RelationDO> relationDOList = new ArrayList<RelationDO>();
+
+        int count = 1;
+        while(temp != null) {
+            String itemId = temp.substring(0,temp.indexOf("\t"));
+            String content = temp.substring(temp.lastIndexOf("\t")+1);
+
+
+
+            if(item.equals(itemId)) {
+                try{
+                    List tempRelationList = parserImplAdapter.featureExtract(content);
+                    relationDOList.addAll(tempRelationList);
+                    System.out.println(count + "    " + itemId + "   " + content);
+                } catch (OutOfMemoryError e) {
+                    System.err.println(content);
+                } catch (Exception e) {
+                    System.err.println(content);
+                }
+
+                count++;
+                temp = br.readLine();
+            }else if(!item.equals(itemId) || temp == null) {
+                if(relationDOList.size() != 0) {
+                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("result/ecigar/" + item));
+                    objectOutputStream.writeInt(relationDOList.size());
+                    for(RelationDO relationDO : relationDOList) {
+                        objectOutputStream.writeObject(relationDO);
+                    }
+                    objectOutputStream.close();
+                    System.out.println("________________________________");
+                }
+
+                item = itemId;
+                relationDOList = new ArrayList<RelationDO>();
+
+            }
+        }
+
+
+        br.close();
 
     }
 
