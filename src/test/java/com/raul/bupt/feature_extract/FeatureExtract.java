@@ -88,6 +88,7 @@ public class FeatureExtract {
                 item = itemId;
                 relationDOList = new ArrayList<RelationDO>();
 
+//                break;
             }
         }
 
