@@ -35,6 +35,6 @@ public class ModelApply {
 
 
     public static void main(String[] args) {
-        modelTrain("noSw.txt","noSwVector");
+        modelTrain("ecigar.txt","ecigarVector");
     }
 }

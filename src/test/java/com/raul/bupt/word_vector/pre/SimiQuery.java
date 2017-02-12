@@ -16,7 +16,7 @@ public class SimiQuery {
 	public static void main(String[] args) throws Exception
 	{
 		Word2VEC vec = new Word2VEC();
-		vec.loadJavaModel("library/model/noSwVector");
+		vec.loadJavaModel("library/model/ecigarVector");
 
 		SimiWordQuery(vec);
 	}
@@ -25,7 +25,7 @@ public class SimiQuery {
 	/**
 	 * 加载某个模型，计算与某个词最为相近的其他N个词
 	 * @param vec
-     */
+	 */
 	private static void SimiWordQuery(Word2VEC vec) {
 
 		int i = 1; //作为是否继续查询的标注
@@ -111,8 +111,8 @@ public class SimiQuery {
 	 * @param word2VEC
 	 * @param word1
 	 * @param word2
-     * @return
-     */
+	 * @return
+	 */
 	private static float getSimilarity(Word2VEC word2VEC,String word1,String word2) {
 
 		float[] f1 = word2VEC.getWordVector(word1);

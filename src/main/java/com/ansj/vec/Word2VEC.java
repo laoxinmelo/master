@@ -27,23 +27,23 @@ public class Word2VEC {
 		// learn.saveModel(new File("library/javaSkip1"));
 
 		Word2VEC vec = new Word2VEC();
-		//åŠ è½½æ¨¡å‹
+		//¼ÓÔØÄ£ĞÍ
 		vec.loadJavaModel("library/javaVector");
 
-		// System.out.println("ä¸­å›½" + "\t" +
-		// Arrays.toString(vec.getWordVector("ä¸­å›½")));
+		// System.out.println("ÖĞ¹ú" + "\t" +
+		// Arrays.toString(vec.getWordVector("ÖĞ¹ú")));
 		// ;
-		// System.out.println("æ¯›æ³½ä¸œ" + "\t" +
-		// Arrays.toString(vec.getWordVector("æ¯›æ³½ä¸œ")));
+		// System.out.println("Ã«Ôó¶«" + "\t" +
+		// Arrays.toString(vec.getWordVector("Ã«Ôó¶«")));
 		// ;
-		// System.out.println("è¶³çƒ" + "\t" +
-		// Arrays.toString(vec.getWordVector("è¶³çƒ")));
+		// System.out.println("×ãÇò" + "\t" +
+		// Arrays.toString(vec.getWordVector("×ãÇò")));
 
 		// Word2VEC vec2 = new Word2VEC();
 		// vec2.loadGoogleModel("library/vectors.bin") ;
 		//
 		//
-		String str = "è´Ÿè´£";
+		String str = "¸ºÔğ";
 		long start = System.currentTimeMillis();
 
 		Set wordset = vec.distance(str);
@@ -60,12 +60,12 @@ public class Word2VEC {
 
 		//System.out.println(System.currentTimeMillis() - start);
 
-		System.out.println("æŸ¥è¯¢æ—¶é—´:"+(System.currentTimeMillis() - start));
+		System.out.println("²éÑ¯Ê±¼ä:"+(System.currentTimeMillis() - start));
 		// System.out.println(vec2.distance(str));
 		//
 		//
-		// //ç”·äºº å›½ç‹ å¥³äºº
-		// System.out.println(vec2.analogy("æ¯›æ³½ä¸œ", "æ¯›æ³½ä¸œæ€æƒ³", "é‚“å°å¹³"));
+		// //ÄĞÈË ¹úÍõ Å®ÈË
+		// System.out.println(vec2.analogy("Ã«Ôó¶«", "Ã«Ôó¶«Ë¼Ïë", "µËĞ¡Æ½"));
 	}
 
 	private HashMap<String, float[]> wordMap = new HashMap<String, float[]>();
@@ -75,10 +75,10 @@ public class Word2VEC {
 	private int topNSize = 25;
 
 	/**
-	 * åŠ è½½æ¨¡å‹
+	 * ¼ÓÔØÄ£ĞÍ
 	 *
 	 * @param path
-	 *            æ¨¡å‹çš„è·¯å¾„
+	 *            Ä£ĞÍµÄÂ·¾¶
 	 * @throws IOException
 	 */
 	public void loadGoogleModel(String path) throws IOException {
@@ -89,9 +89,9 @@ public class Word2VEC {
 		try {
 			bis = new BufferedInputStream(new FileInputStream(path));
 			dis = new DataInputStream(bis);
-			// //è¯»å–è¯æ•°
+			// //¶ÁÈ¡´ÊÊı
 			words = Integer.parseInt(readString(dis));
-			// //å¤§å°
+			// //´óĞ¡
 			size = Integer.parseInt(readString(dis));
 			String word;
 			float[] vectors = null;
@@ -120,10 +120,10 @@ public class Word2VEC {
 	}
 
 	/**
-	 * åŠ è½½æ¨¡å‹ï¼Œè¯»å–è¯­æ–™ä¸­æ‰€æœ‰è¯çš„å‘é‡ï¼Œå¹¶å¯¹å…¶è¿›è¡Œå½’ä¸€åŒ–
+	 * ¼ÓÔØÄ£ĞÍ£¬¶ÁÈ¡ÓïÁÏÖĞËùÓĞ´ÊµÄÏòÁ¿£¬²¢¶ÔÆä½øĞĞ¹éÒ»»¯
 	 *
 	 * @param path
-	 *            æ¨¡å‹çš„è·¯å¾„
+	 *            Ä£ĞÍµÄÂ·¾¶
 	 * @throws IOException
 	 */
 	public void loadJavaModel(String path) throws IOException {
@@ -150,7 +150,7 @@ public class Word2VEC {
 
 				len = Math.sqrt(len);
 
-				//å½’ä¸€åŒ–
+				//¹éÒ»»¯
 				for (int j = 0; j < size; j++) {
 					value[j] /= len;
 				}
@@ -169,7 +169,7 @@ public class Word2VEC {
 	private static final int MAX_SIZE = 50;
 
 	/**
-	 * æ ¹æ®ä¸‰ä¸ªæç¤ºè¯æ‰¾åˆ°å…¶è¿‘ä¹‰è¯
+	 * ¸ù¾İÈı¸öÌáÊ¾´ÊÕÒµ½Æä½üÒå´Ê
 	 *
 	 * @return
 	 */
@@ -186,7 +186,7 @@ public class Word2VEC {
 			wordVector[i] = wv1[i] - wv0[i] + wv2[i];
 		}
 
-		float[] tempVector;//åœ¨éå†ä¸­ç”¨æ¥ä¿å­˜è¯å‘é‡
+		float[] tempVector;//ÔÚ±éÀúÖĞÓÃÀ´±£´æ´ÊÏòÁ¿
 		String name;
 		List<WordEntry> wordEntrys = new ArrayList<WordEntry>(topNSize);
 		for (Entry<String, float[]> entry : wordMap.entrySet())
@@ -208,7 +208,7 @@ public class Word2VEC {
 	}
 
 	/**
-	 * æ‰¾åˆ°ä¸ä¹‹æœ€ä¸ºç›¸è¿‘çš„topNSizeä¸ªè¯
+	 * ÕÒµ½ÓëÖ®×îÎªÏà½üµÄtopNSize¸ö´Ê
 	 * @param name
 	 * @param score
 	 * @param wordsEntrys
@@ -217,11 +217,11 @@ public class Word2VEC {
 		// TODO Auto-generated method stub
 		if (wordsEntrys.size() < topNSize)
 		{
-			wordsEntrys.add(new WordEntry(name, score));//è‹¥æ•°é‡å°äºtopNSizeï¼Œç›´æ¥å¯¼å…¥
+			wordsEntrys.add(new WordEntry(name, score));//ÈôÊıÁ¿Ğ¡ÓÚtopNSize£¬Ö±½Óµ¼Èë
 			return;
 		}
 
-		//å¦‚æœæ•°é‡å·²ç»è¾¾åˆ°topNSizeï¼Œåˆ™å°†æœ€å°çš„æ›¿æ¢æ‰
+		//Èç¹ûÊıÁ¿ÒÑ¾­´ïµ½topNSize£¬Ôò½«×îĞ¡µÄÌæ»»µô
 		float min = Float.MAX_VALUE;
 		int minOffe = 0;
 		for (int i = 0; i < topNSize; i++)
@@ -242,7 +242,7 @@ public class Word2VEC {
 	}
 
 	/**
-	 * è®¡ç®—å‡ºå…³è”æ€§æœ€å¼ºçš„è¯
+	 * ¼ÆËã³ö¹ØÁªĞÔ×îÇ¿µÄ´Ê
 	 * @param queryWord
 	 * @return
 	 */
@@ -257,7 +257,7 @@ public class Word2VEC {
 		//}
 
 		if (center == null) {
-			System.out.println("è¯¥è¯ä¸å­˜åœ¨!!!!!");
+			System.out.println("¸Ã´Ê²»´æÔÚ!!!!!");
 			return Collections.emptySet();
 		}
 
@@ -298,7 +298,7 @@ public class Word2VEC {
 	}
 
 	/**
-	 * æ‰¾åˆ°ä¸å…¶å…³è”æ€§æœ€å¼ºè¿‘çš„è¯+
+	 * ÕÒµ½ÓëÆä¹ØÁªĞÔ×îÇ¿½üµÄ´Ê+
 	 * @param words
 	 * @return
 	 */
@@ -311,7 +311,7 @@ public class Word2VEC {
 		}
 
 		if (center == null) {
-			System.out.println("è¯¥è¯ä¸å­˜åœ¨ï¼");
+			System.out.println("¸Ã´Ê²»´æÔÚ£¡");
 			return Collections.emptySet();
 		}
 
@@ -351,7 +351,7 @@ public class Word2VEC {
 	}
 
 
-	//æ±‚å’Œ
+	//ÇóºÍ
 	private float[] sum(float[] center, float[] fs) {
 		// TODO Auto-generated method stub
 
@@ -375,7 +375,7 @@ public class Word2VEC {
 	}
 
 	/**
-	 * å¾—åˆ°è¯å‘é‡
+	 * µÃµ½´ÊÏòÁ¿
 	 *
 	 * @param word
 	 * @return
@@ -391,7 +391,7 @@ public class Word2VEC {
 	}
 
 	/**
-	 * è¯»å–ä¸€ä¸ªfloat
+	 * ¶ÁÈ¡Ò»¸öfloat
 	 *
 	 * @param b
 	 * @return
@@ -406,7 +406,7 @@ public class Word2VEC {
 	}
 
 	/**
-	 * è¯»å–ä¸€ä¸ªå­—ç¬¦ä¸²
+	 * ¶ÁÈ¡Ò»¸ö×Ö·û´®
 	 *
 	 * @param dis
 	 * @return

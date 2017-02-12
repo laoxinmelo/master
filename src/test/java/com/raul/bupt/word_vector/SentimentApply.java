@@ -1,10 +1,14 @@
 package com.raul.bupt.word_vector;
 
+import com.raul.bupt.db.DBTool;
 import com.raul.bupt.db.RedisTool;
+import com.raul.bupt.db.impl.DBToolImpl;
 import com.raul.bupt.db.impl.RedisToolImpl;
 import com.raul.bupt.word_vector.pre.SWFinder;
 
 import java.io.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -15,13 +19,15 @@ public class SentimentApply {
 
     //redis操作工具
     private static final RedisTool redisTool = new RedisToolImpl();
+    //数据库操作工具
+    private static final DBTool dbTool = new DBToolImpl();
 
     private static final List<String> positiveWordList = SWFinder.getPositiveWordList();  //正向情感词词典
     private static final List<String> negativeWordList = SWFinder.getNegativeWordList();  //负向情感词词典
 
     private static final int originReviewIndex = 1;
     private static final int appendReviewIndex = 2;
-    private static final int sentimentWordIndex = 4;
+    private static final int sentimentWordIndex = 6;
     private static final int contentWithoutStopWordIndex = 1;
 
     private static final String contentSplit = "\r\n";
@@ -31,14 +37,14 @@ public class SentimentApply {
     private static final String positiveIndex = "positive";
     private static final String negativeIndex = "negative";
 
-    private static final String hiddenSentimentWordSavePath = "corpus/sentiment/hidden/HiddenSentiment.txt";
+    private static final String hiddenSentimentWordSavePath = "corpus/sentiment/hidden/HiddenSentimentEcigar.txt";
 
     /**
-     * 将情感词（隐性+显性）按照情感倾向加入到redis库(index=4)中
+     * 将情感词（隐性+显性）按照情感倾向加入到redis库中
      */
     private static void sentimentWordToRedis() {
 
-        Map<String,HashSet<String>> swMap = ergodicReviewForSW();
+        Map<String,HashSet<String>> swMap = ergodicReviewForSW4Ecigar();
         Set<String> positiveSet = swMap.get(positiveIndex);
         Set<String> negativeSet = swMap.get(negativeIndex);
 
@@ -70,6 +76,42 @@ public class SentimentApply {
             redisTool.setValue(sentimentWordIndex,negativeWord,"-1");
         }
 
+    }
+
+
+    /**
+     * 遍历所有评论文本，找出文本中出现的情感词...针对电子烟评论
+     * @return
+     */
+    private static Map<String,HashSet<String>> ergodicReviewForSW4Ecigar() {
+        Map<String,HashSet<String>> swMap = new HashMap<String, HashSet<String>>();
+        swMap.put(positiveIndex,new HashSet<String>());
+        swMap.put(negativeIndex,new HashSet<String>());
+
+
+        ResultSet resultSet = dbTool.query("select segmentNoSW from ecigar;");
+        try{
+            while(resultSet.next()) {
+                String segmentNoSW = resultSet.getString(1);
+                System.out.println(segmentNoSW);
+
+                for(String word:segmentNoSW.split(wordSplit)) {
+                    word = word.trim();
+                    if(positiveWordList.contains(word)) {
+                        HashSet<String> positiveSet = swMap.get(positiveIndex);
+                        positiveSet.add(word);
+                    }
+                    if(negativeWordList.contains(word)) {
+                        HashSet<String> negativeSet = swMap.get(negativeIndex);
+                        negativeSet.add(word);
+                    }
+                }
+            }
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return swMap;
     }
 
 

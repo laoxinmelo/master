@@ -1,10 +1,13 @@
 package com.raul.bupt.word_freq;
 
+import com.raul.bupt.db.DBTool;
 import com.raul.bupt.db.RedisTool;
+import com.raul.bupt.db.impl.DBToolImpl;
 import com.raul.bupt.db.impl.RedisToolImpl;
 import com.raul.bupt.parser.dataobject.RelationDO;
 
 import java.io.*;
+import java.sql.ResultSet;
 import java.util.*;
 
 /**
@@ -76,11 +79,58 @@ public class NounCounter {
 
 
     /**
+     * 对电子烟评论的所有名词进行统计
+     * @return
+     */
+    private static Map WordFreqCount4Ecigar() throws Exception {
+
+        //每个词对应一个hashMap.该hashMap表示该词以各类词性在语料中的出现次数
+        Map<String, HashMap<String, Integer>> wordMap = new HashMap<String, HashMap<String, Integer>>();
+
+        InputStreamReader isr = new InputStreamReader(new FileInputStream(new File("corpus/taggerNote.txt")),"gbk");
+        BufferedReader br = new BufferedReader(isr);
+
+        String temp = br.readLine();
+        while (temp != null) {
+            temp = temp.substring(temp.lastIndexOf("\t")+1);
+            String[] wordUnitArray = temp.trim().split(wordSplit);
+            for (String wordUnit : wordUnitArray) {
+                try {
+                    String word = wordUnit.substring(0, wordUnit.lastIndexOf(unitSplit));
+                    String POS = wordUnit.substring(wordUnit.lastIndexOf(unitSplit) + 1);
+
+                    HashMap<String, Integer> freqMap = null;
+                    if (wordMap.containsKey(word)) {
+                        freqMap = wordMap.get(word);
+                        if (freqMap.containsKey(POS)) {
+                            freqMap.put(POS, freqMap.get(POS) + 1);
+                        } else {
+                            freqMap.put(POS, 1);
+                        }
+                    } else {
+                        freqMap = new HashMap<String, Integer>();
+                        freqMap.put(POS, 1);
+                    }
+                    wordMap.put(word, freqMap);
+                }catch (StringIndexOutOfBoundsException e) {
+                    System.out.println(wordUnit);
+                }
+            }
+
+            temp = br.readLine();
+        }
+
+        return wordMap;
+    }
+
+
+
+    /**
      * 从所提取的语义关系中获取名词，并保存在Set当中
      * 逐一获取其在所有评论中的词频
      */
     private static void getAttributeFreq(Map<String,Map<String,Integer>> wordMap) {
-        String filePath = "./result/feature/";
+        String filePath = "result/ecigar/feature/";
         List<String> wordList = new ArrayList<String>();
 
         try {
@@ -139,8 +189,8 @@ public class NounCounter {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
 
-        getAttributeFreq(WordFreqCount());
+        getAttributeFreq(WordFreqCount4Ecigar());
     }
 }

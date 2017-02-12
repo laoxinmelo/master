@@ -22,7 +22,7 @@ public class ClusterPro {
     private static final Word2VEC vec = new Word2VEC();
 
     //所需加载模型的保存路径
-    private static final String modelPath = "library\\model\\noSwVector";
+    private static final String modelPath = "library\\model\\ecigarVector";
 
     //初始特征的保存路径
     private static final String attributePath = "result\\originAttribute.txt";

@@ -25,9 +25,9 @@ public class AspectBasedAnalyzer {
     //情感词典在redis中的索引
     private static final Integer swIndex = 4;
     //特征集合在redis中的索引
-    private static final Integer featureIndex = 5;
+    private static final Integer featureIndex = 7;
     //商品语义关系存放位置
-    private static final String itemFeatureSavePath = "result/feature/";
+    private static final String itemFeatureSavePath = "result/ecigar/feature/";
 
     //情感词集
     private static final Map<String,Integer> swMap = getSentimentWordMap();
@@ -110,7 +110,7 @@ public class AspectBasedAnalyzer {
 
         try {
 
-            BufferedWriter bw = new BufferedWriter(new FileWriter("result/aspect-based.txt"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("result/ecigar/aspect-based.txt"));
 
             File[] files = new File(itemFeatureSavePath).listFiles();
             for(File file:files) {
@@ -195,6 +195,6 @@ public class AspectBasedAnalyzer {
 
 
     public static void main(String[] args) {
-//        AspectBasedFeatureSentimentCalculate();
+        AspectBasedFeatureSentimentCalculate();
     }
 }

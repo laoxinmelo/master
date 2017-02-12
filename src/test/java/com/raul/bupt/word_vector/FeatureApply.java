@@ -20,15 +20,15 @@ import java.util.List;
 public class FeatureApply {
 
     //初始特征聚类结果
-    private static final String originFeatureSavePath = "result/originFeature.txt";
+    private static final String originFeatureSavePath = "result/ecigar/result/originFeature.txt";
     //word2vec模型存放位置
-    private static final String vecModelPath = "library\\model\\noSwVector";
+    private static final String vecModelPath = "library\\model\\ecigarVector";
     //特征存放位置
-    private static final String itemFeatureSavePath = "result/feature/";
+    private static final String itemFeatureSavePath = "result/ecigar/feature/";
     //所得特征提取结果的保存位置
-    private static final String featureTableSavePath = "result/featureTable.txt";
+    private static final String featureTableSavePath = "result/ecigar/result/featureTable.txt";
     //候选特征词保存位置
-    private static final String candFeatureSavePath = "result/candAttribute.txt";
+    private static final String candFeatureSavePath = "result/ecigar/result/candAttribute.txt";
 
     //redis库操作工具
     private static final RedisTool redisTool = new RedisToolImpl();
@@ -40,7 +40,7 @@ public class FeatureApply {
     //所提取得到特征之间的分隔符
     private static final String tableSplit = "\t";
     //相似度阈值
-    private static final double simiThreshold = 0.3;
+    private static final double simiThreshold = 0.4;
     //所提取特征在redis中的存放位置
     private static final int featureRedisIndex = 5;
 
@@ -67,6 +67,8 @@ public class FeatureApply {
             String temp = br.readLine();
 
             while(temp != null) {
+                temp = temp.substring(0,temp.indexOf(tableSplit));
+
                 candFeatureList.add(temp.trim());
                 temp = br.readLine();
             }
@@ -146,6 +148,12 @@ public class FeatureApply {
         }catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+
+        for(String cluser:clusterList) {
+            System.out.println(cluser.replaceAll(featureSplit,"\t"));
+        }
+
     }
 
     /**
@@ -155,6 +163,7 @@ public class FeatureApply {
      * @return
      */
     private static void addToCluster(String word) {
+
 
         int maxIndex = 0;
         float maxValue = 0;
@@ -237,7 +246,10 @@ public class FeatureApply {
 
     public static void main(String[] args) throws IOException{
 
-        featureToRedis();
+        vec.loadJavaModel(vecModelPath);
+
+        candFeatureCalculate();
+//        featureToRedis();
     }
 
 

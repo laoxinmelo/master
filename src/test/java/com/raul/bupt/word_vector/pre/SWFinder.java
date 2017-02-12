@@ -7,31 +7,32 @@ import java.io.*;
 import java.util.*;
 
 /**
+ * ÒşĞÔÇé¸Ğ´ÊÌáÈ¡
  * Created by Administrator on 2016/11/17.
  */
 public class SWFinder {
 
-    private static final String dicType = "ntusd"; //æƒ…æ„Ÿè¯å…¸ç±»å‹
+    private static final String dicType = "ntusd"; //Çé¸Ğ´ÊµäÀàĞÍ
 
-    private static final String positiveWordPath = "corpus/sentiment/" + dicType + "/postive.txt";
+    private static final String positiveWordPath = "corpus/sentiment/" + dicType + "/positive.txt";
     private static final String negativeWordPath = "corpus/sentiment/" + dicType + "/negative.txt";
 
 
-    private static final List<String> positiveWordList = getPositiveWordList();  //æ­£å‘æƒ…æ„Ÿè¯è¯å…¸
-    private static final List<String> negativeWordList = getNegativeWordList();  //è´Ÿå‘æƒ…æ„Ÿè¯è¯å…¸
+    private static final List<String> positiveWordList = getPositiveWordList();  //ÕıÏòÇé¸Ğ´Ê´Êµä
+    private static final List<String> negativeWordList = getNegativeWordList();  //¸ºÏòÇé¸Ğ´Ê´Êµä
 
-    //æ‰€éœ€åŠ è½½æ¨¡å‹çš„ä¿å­˜è·¯å¾„
-    private static final String modelPath = "library\\model\\noSwVector";
+    //ËùĞè¼ÓÔØÄ£ĞÍµÄ±£´æÂ·¾¶
+    private static final String modelPath = "library\\model\\ecigarVector";
 
-    //reviewIdä¹‹é—´çš„åˆ†éš”ç¬¦
+    //reviewIdÖ®¼äµÄ·Ö¸ô·û
     private static final String freqSplit = ",";
 
-    //word2vecæ¨¡å‹å·¥å…·
+    //word2vecÄ£ĞÍ¹¤¾ß
     private static final Word2VEC vec = new Word2VEC();
 
 
     /**
-     * è·å–æ­£å‘æƒ…æ„Ÿè¯
+     * »ñÈ¡ÕıÏòÇé¸Ğ´Ê
      * @return
      * @throws IOException
      */
@@ -44,6 +45,7 @@ public class SWFinder {
 
             String temp = br.readLine();
             while (temp != null) {
+
                 positiveWordList.add(temp.trim());
                 temp = br.readLine();
             }
@@ -55,7 +57,7 @@ public class SWFinder {
     }
 
     /**
-     * è·å–è´Ÿå‘æƒ…æ„Ÿè¯
+     * »ñÈ¡¸ºÏòÇé¸Ğ´Ê
      * @return
      * @throws IOException
      */
@@ -77,53 +79,26 @@ public class SWFinder {
         return negativeWordList;
     }
 
-    /**
-     * è·å–å¤§è¿ç†å·¥æƒ…æ„Ÿè¯å…¸
-     * @return
-     */
-    private static Map<String,Double> getSentimentDict() throws Exception{
-        String filePath = "corpus/sentiment/dalian.txt";
-        InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(new File(filePath)),"gbk");
-        BufferedReader br = new BufferedReader(inputStreamReader);
-        String temp = br.readLine();
-
-        Map<String,Double> sentimentWordMap = new HashMap<String, Double>();
-        while(temp != null) {
-            String word =temp.substring(0,temp.indexOf("\t"));
-            Double value = Double.valueOf(temp.substring(temp.lastIndexOf("\t")+1));
-
-            sentimentWordMap.put(word,value);
-            temp = br.readLine();
-        }
-
-
-        return sentimentWordMap;
-    }
-
 
     /**
-     * æ‰¾å‡ºéšæ€§æƒ…æ„Ÿè¯
+     * ÕÒ³öÒşĞÔÇé¸Ğ´Ê
      */
     private static void hiddenSentimentWordFinder() {
-        String vocabularyPath = "library/vocabulary/noSw.txt";
+        String vocabularyPath = "library/vocabulary/ecigar.txt";
         try {
             InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(new File(vocabularyPath)));
             BufferedReader br = new BufferedReader(inputStreamReader);
             String temp = br.readLine();
 
-            BufferedWriter bw = new BufferedWriter(new FileWriter("result/"+dicType+"SentimentWord.txt"));
-//            BufferedWriter bw = new BufferedWriter(new FileWriter("result/dalianSentimentWord.txt"));
-//            Map<String,Double> sentimentWordMap = getSentimentDict();
+            BufferedWriter bw = new BufferedWriter(new FileWriter("result/"+dicType+"SentimentWord-Ecigar.txt"));
 
             while(temp != null) {
                 temp = temp.trim();
                 String word = temp.substring(0,temp.lastIndexOf(freqSplit));
 
 
-
                 if(!word.replaceAll("[^\u4e00-\u9fa5]","").equals("")) {
                     if ((!positiveWordList.contains(word)) && (!negativeWordList.contains(word))) {
-//                     if(!sentimentWordMap.containsKey(word)) {
                         Set<WordEntry> simiWordSet = vec.distance(word);
                         float value = 0;
 
@@ -131,33 +106,24 @@ public class SWFinder {
                         for (WordEntry wordEntry : simiWordSet) {
                             String simiWord = wordEntry.name;
                             float simiValue = wordEntry.score;
-                            /**
-                             * ä½¿ç”¨å¤§è¿ç†å·¥æƒ…æ„Ÿè¯å…¸æ—¶çš„æƒ…æ„Ÿè®¡ç®—æ–¹æ³•
-                             */
-//                            if(sentimentWordMap.containsKey(simiWord)) {
-//                                value += simiValue * sentimentWordMap.get(simiWord);
-//                                System.out.println(word + " " + simiWord + "    " + simiValue);
-//                                simiCount += 1;
-//                            }
 
                             /**
-                             * ä½¿ç”¨NTUSDæƒ…æ„Ÿæƒ…æ„Ÿè¯å…¸æ—¶çš„æƒ…æ„Ÿè®¡ç®—æ–¹æ³•
+                             * Ê¹ÓÃNTUSDÇé¸ĞÇé¸Ğ´ÊµäÊ±µÄÇé¸Ğ¼ÆËã·½·¨
                              */
                             if (positiveWordList.contains(simiWord)) {
                                 value += simiValue;
+                                System.out.println(simiWord + " " + word + "    " + simiValue);
                                 simiCount += 1;
                             }
                             if (negativeWordList.contains(simiWord)) {
                                 value -= simiValue;
+                                System.out.println(simiWord + " " + word + "    " + simiValue);
                                 simiCount += 1;
                             }
                         }
 
-//                         if(simiCount != 0) {
-//                             value = value/simiCount;
-//                         }
                         if (value != 0) {
-                            System.out.println(word + " " + value + "   " + value/simiCount);
+                            System.out.println(word + " " + value + "   " + value / simiCount);
                             bw.write(word + "\t" + value + "\t" + value/simiCount + "\r\n");
                         }
 
@@ -177,11 +143,14 @@ public class SWFinder {
 
 
     /**
-     * å°†è¯­æ–™ä¸­å‡ºç°è¿‡çš„æƒ…æ„Ÿè¯åŠ å…¥åˆ°redisä¸­
+     * ½«ÓïÁÏÖĞ³öÏÖ¹ıµÄÇé¸Ğ´Ê¼ÓÈëµ½redisÖĞ
      * @param args
      */
     public static void main(String[] args) throws Exception{
-        vec.loadJavaModel(modelPath);  //æ¨¡å‹åŠ è½½
+
+//        System.out.println(positiveWordList.size());
+//        System.out.println(negativeWordList.size());
+        vec.loadJavaModel(modelPath);  //Ä£ĞÍ¼ÓÔØ
         hiddenSentimentWordFinder();
 //        getSentimentDict();
     }

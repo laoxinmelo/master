@@ -4,6 +4,10 @@ import com.raul.bupt.db.RedisTool;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Set;
@@ -20,6 +24,10 @@ public class RedisToolImpl implements RedisTool {
      * dbIndex=1表示初始评论的缓存
      * dbIndex=2表示追加评论的缓存
      * dbIndex=3表示商家反馈的缓存
+     * dbIndex=4表示游戏本对应的隐性情感词
+     * dbIndex=5表示游戏本对应的属性特征
+     * dbIndex=6表示电子烟对应的隐性情感词
+     * dbIndex=7表示电子烟对应的属性特征
      */
 
     private static final String host = "127.0.0.1";  //本地redis库
@@ -86,4 +94,5 @@ public class RedisToolImpl implements RedisTool {
         jedis.select(dbIndex);
         return jedis.exists(key);
     }
+
 }
