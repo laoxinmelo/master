@@ -24,13 +24,13 @@ import java.util.Set;
 public class FeatureExtract {
 
     //数据库操作工具
-    private static final DBTool dbTool = new DBToolImpl();
+//    private static final DBTool dbTool = new DBToolImpl();
     //redis操作工具
     private static final RedisTool redisTool = new RedisToolImpl();
     //语义解析工具
     private static final ParserImplAdapter parserImplAdapter = new ParserImplAdapter();
     //分词工具
-    private static final WordParticiple wordParticiple = new WordParticipleImpl();
+//    private static final WordParticiple wordParticiple = new WordParticipleImpl();
     //reviewId的分隔符
     private static final String split = ";";
 
