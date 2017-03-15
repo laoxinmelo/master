@@ -28,12 +28,8 @@
 
 package com.raul.bupt.jgibblda;
 
-import com.sun.javafx.Logging;
-import org.apache.log4j.spi.LoggingEvent;
-
 import java.io.*;
 import java.util.*;
-import java.util.logging.Logger;
 
 public class RunEstimation {
 	
