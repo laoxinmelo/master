@@ -40,63 +40,7 @@ public class FeatureExtract {
 
     public static void main(String[] args) throws Exception{
 //        featureExtract4PC();
-        grammarExtract4PC();
-    }
-
-    /**
-     * 提取电子烟商品的属性特征
-     * @throws Exception
-     */
-    public static void featureExtract4Ecigar() throws Exception {
-
-        //读取电子烟评论数据
-        InputStreamReader isr = new InputStreamReader(new FileInputStream(new File("corpus/taggerNote.txt")));
-        BufferedReader br = new BufferedReader(isr);
-
-        String temp = br.readLine();
-
-        String item = "";
-        List<RelationDO> relationDOList = new ArrayList<RelationDO>();
-
-        int count = 1;
-        while(temp != null) {
-            String itemId = temp.substring(0,temp.indexOf("\t"));
-            String content = temp.substring(temp.lastIndexOf("\t")+1);
-
-
-
-            if(item.equals(itemId)) {
-                try{
-                    List tempRelationList = parserImplAdapter.featureExtract(content);
-                    relationDOList.addAll(tempRelationList);
-                    System.out.println(count + "    " + itemId + "   " + content);
-                } catch (OutOfMemoryError e) {
-                    System.err.println(content);
-                } catch (Exception e) {
-                    System.err.println(content);
-                }
-
-                count++;
-                temp = br.readLine();
-            }else if(!item.equals(itemId) || temp == null) {
-                if(relationDOList.size() != 0) {
-                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("result/ecigar/" + item));
-                    objectOutputStream.writeInt(relationDOList.size());
-                    for(RelationDO relationDO : relationDOList) {
-                        objectOutputStream.writeObject(relationDO);
-                    }
-                    objectOutputStream.close();
-                    System.out.println("________________________________");
-                }
-
-                item = itemId;
-                relationDOList = new ArrayList<RelationDO>();
-
-            }
-        }
-
-        br.close();
-
+        grammarExtract();
     }
 
 
@@ -104,7 +48,7 @@ public class FeatureExtract {
      * 提取游戏本商品中的所有语义关系
      * @throws Exception
      */
-    public static void grammarExtract4PC() throws Exception {
+    public static void grammarExtract() throws Exception {
 
         Set itemIdSet = redisTool.getKeys(0);
         Iterator iterator = itemIdSet.iterator();
@@ -153,7 +97,7 @@ public class FeatureExtract {
      * 提取游戏本商品的属性特征
      * @throws Exception
      */
-    public static void featureExtract4PC() throws Exception{
+    public static void featureExtract() throws Exception{
 
         Set itemIdSet = redisTool.getKeys(0);
         Iterator iterator = itemIdSet.iterator();
