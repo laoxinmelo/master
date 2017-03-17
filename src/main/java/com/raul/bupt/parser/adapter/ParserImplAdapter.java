@@ -156,6 +156,56 @@ public class ParserImplAdapter  extends ParserImpl{
     }
 
     /**
+     * 找出一个句子中所包含的所有语义关系
+     *
+     * @param sentence
+     * @return
+     */
+    public List allFeatureExtract(String sentence) {
+
+
+        List splitList = sentenceSplit(this.wordPosTag(sentence));//对句子进行词性标注
+
+        //用来保存包含细粒度特征的语义关系
+        List<RelationDO> grammarList = new ArrayList<RelationDO>();
+        for(Object split : splitList) {
+
+            List<WordDO> wordPosList = this.wordPosTag((String) split);  //对句子进行词性标注
+
+            String content = preprocess((String) split);
+            Tree depenTree = sentenceParse(content);   //获取句子的语义依赖树
+            List<TypedDependency> grammarRelationList = this.grammarRelationExtract(depenTree); //获取句子的所有语义关系
+
+            for (TypedDependency typedDependency : grammarRelationList) {
+                GrammaticalRelation grammaticalRelation = typedDependency.reln();
+                String grammarName = grammaticalRelation.getShortName();
+
+                //获取语义关系的名称
+                RelationDO relationDO = new RelationDO();
+                relationDO.setRelationName(grammarName);
+
+                if(grammarName.equals(rootRelation)) {
+                    continue;
+                }
+
+                TreeGraphNode govNode = typedDependency.gov();
+                WordDO govWordDO = wordPosList.get(govNode.index()-1);
+                relationDO.setGovWordDO(govWordDO);
+
+                TreeGraphNode depNode = typedDependency.dep();
+                WordDO depWordDO = wordPosList.get(depNode.index()-1);
+                relationDO.setDepWordDO(depWordDO);
+
+                grammarList.add(relationDO);
+            }
+
+        }
+
+        return grammarList;
+    }
+
+
+    /**
      * 找出符合要求的语义关系
      * @param sentence
      */

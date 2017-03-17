@@ -25,18 +25,22 @@ public class FeatureExtract {
 
     //数据库操作工具
 //    private static final DBTool dbTool = new DBToolImpl();
+
     //redis操作工具
     private static final RedisTool redisTool = new RedisToolImpl();
     //语义解析工具
     private static final ParserImplAdapter parserImplAdapter = new ParserImplAdapter();
+
     //分词工具
 //    private static final WordParticiple wordParticiple = new WordParticipleImpl();
+
     //reviewId的分隔符
     private static final String split = ";";
 
 
     public static void main(String[] args) throws Exception{
-        featureExtract4Ecigar();
+//        featureExtract4PC();
+        grammarExtract4PC();
     }
 
     /**
@@ -88,13 +92,60 @@ public class FeatureExtract {
                 item = itemId;
                 relationDOList = new ArrayList<RelationDO>();
 
-//                break;
             }
         }
 
-
         br.close();
 
+    }
+
+
+    /**
+     * 提取游戏本商品中的所有语义关系
+     * @throws Exception
+     */
+    public static void grammarExtract4PC() throws Exception {
+
+        Set itemIdSet = redisTool.getKeys(0);
+        Iterator iterator = itemIdSet.iterator();
+
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("result/grammarList"));
+        int totalCount = 0;
+
+        while(iterator.hasNext()) {
+            String itemId = (String) iterator.next();
+
+            String reviewIdSet = redisTool.getValue(0, itemId);
+            String[] reviewArray = reviewIdSet.split(split);
+            if(reviewArray.length == 0) {
+                continue;
+            }
+
+            int dbIndex = 1;
+            for (String reviewId : reviewArray) {
+
+                String content = redisTool.getValue(dbIndex, reviewId);
+                if(content == null) {
+                    continue;
+                }
+                String[] contentArray = content.split("\r\n");
+                if (contentArray.length == 3) {
+                    try {
+                        List relationDOList = parserImplAdapter.allFeatureExtract(contentArray[2]);
+                        for(Object relationDO:relationDOList) {
+                            objectOutputStream.writeObject(relationDO);
+                        }
+                        System.out.println(itemId + "   " + reviewId + "    " + (++totalCount));
+                    } catch (OutOfMemoryError e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        objectOutputStream.close();
     }
 
 
@@ -122,7 +173,7 @@ public class FeatureExtract {
                 continue;
             }
 
-            for (int dbIndex = 1; dbIndex <= 2; dbIndex++) {
+            for (int dbIndex = 1; dbIndex <= 1; dbIndex++) {
                 for (String reviewId : reviewArray) {
 
                     String content = redisTool.getValue(dbIndex, reviewId);
