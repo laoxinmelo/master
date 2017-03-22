@@ -31,9 +31,6 @@ public class FeatureExtract {
     //语义解析工具
     private static final ParserImplAdapter parserImplAdapter = new ParserImplAdapter();
 
-    //分词工具
-//    private static final WordParticiple wordParticiple = new WordParticipleImpl();
-
     //reviewId的分隔符
     private static final String split = ";";
 
