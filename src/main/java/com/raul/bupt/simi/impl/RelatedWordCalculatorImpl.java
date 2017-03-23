@@ -79,15 +79,77 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
         Set<String> wordSet = grammarRelationSet.wordSet;
         Set<String> relationSet = grammarRelationSet.relationSet;
 
+        if(!wordSet.contains(word)) {
+            return null;
+        }
 
 
-        return null;
+        List<RelationWord> relationWordList = new ArrayList<RelationWord>();
+        System.out.println(word + ":");
+        for(String candidateWord:wordSet) {
+            if(candidateWord.equals(word)) {
+                continue;
+            }
+
+            for(String relationName:relationSet) {
+
+                int WordRelationCandidateWord = 0;  //包含了输入词、候选词以及相关语义关系的数量
+                int AnywordRelationAnyword = 0;  //包含了相关语义关系的数量
+                int WordRelationAnyword = 0;  //包含了输入词、相关语义关系的数量
+                int AnywordRelationCandidateWord = 0;  //包含了候选词、相关语义关系的数量
+
+                for(RelationDO relationDO:relationDOList) {
+
+                    String DORealtionName = relationDO.getRelationName();
+                    String DOGovWord = relationDO.getGovWordDO().getWord();
+                    String DODepWord = relationDO.getDepWordDO().getWord();
+
+                    if(!DORealtionName.equals(relationName)) {
+                        continue;
+                    }
+
+                    AnywordRelationAnyword++;
+
+                    if(DOGovWord.equals(word)) {
+                        WordRelationAnyword++;
+                    }
+
+                    if(DODepWord.equals(candidateWord)) {
+                        AnywordRelationCandidateWord++;
+                    }
+
+                    if(DOGovWord.equals(word) && DODepWord.equals(candidateWord)) {
+                        WordRelationCandidateWord++;
+                    }
+                }
+
+                double numerator = Double.valueOf(WordRelationCandidateWord*AnywordRelationAnyword);
+                double denominator = Double.valueOf(WordRelationAnyword*AnywordRelationCandidateWord);
+                if(denominator > 0) {
+
+                    double value = Math.log(numerator/denominator+1);
+                    if(value>0) {
+                        RelationWord relationWord = new RelationWord(relationName,candidateWord);
+                        relationWordList.add(relationWord);
+                        System.out.println(word + "   " + relationName + " " + candidateWord + "    " + value);
+                    }
+                }
+            }
+        }
+
+        System.out.println("______________________________________");
+
+        return relationWordList;
+
     }
 
     public static void main(String[] args) {
-//        for(RelationDO relationDO:relationDOList) {
-//            System.out.println(relationDO);
-//        }
+
+        RelatedWordCalculator relatedWordCalculator = new RelatedWordCalculatorImpl();
+        Set<String> wordSet = grammarRelationSet.wordSet;
+        for(String word:wordSet) {
+            relatedWordCalculator.calculateRelatedWordList(word);
+        }
     }
 
 }

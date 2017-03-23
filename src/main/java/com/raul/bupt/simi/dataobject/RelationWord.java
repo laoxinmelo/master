@@ -24,4 +24,20 @@ public class RelationWord {
     public void setWord(String word) {
         this.word = word;
     }
+
+    public RelationWord(String relationName,String word) {
+        this.relationName = relationName;
+        this.word = word;
+    }
+
+
+    /**
+     * 判断两个RelationWord对象是否相等
+     *
+     * @param relationWord
+     * @return
+     */
+    public boolean equals(RelationWord relationWord) {
+        return this.word.equals(relationWord.getWord()) && this.relationName.equals(relationWord.getRelationName());
+    }
 }
