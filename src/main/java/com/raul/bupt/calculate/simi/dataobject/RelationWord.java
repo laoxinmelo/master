@@ -9,6 +9,8 @@ public class RelationWord {
 
     private String word;  //构成语义关系的词
 
+    private double value; //计算的I值
+
     public String getRelationName() {
         return relationName;
     }
@@ -25,9 +27,18 @@ public class RelationWord {
         this.word = word;
     }
 
-    public RelationWord(String relationName,String word) {
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    public RelationWord(String relationName, String word, double value) {
         this.relationName = relationName;
         this.word = word;
+        this.value = value;
     }
 
 

@@ -129,7 +129,7 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
 
                     double value = Math.log(numerator/denominator+1);
                     if(value>0) {
-                        RelationWord relationWord = new RelationWord(relationName,candidateWord);
+                        RelationWord relationWord = new RelationWord(relationName,candidateWord,value);
                         relationWordList.add(relationWord);
                         System.out.println(word + "   " + relationName + " " + candidateWord + "    " + value);
                     }
