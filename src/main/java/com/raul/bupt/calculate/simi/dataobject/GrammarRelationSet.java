@@ -1,8 +1,7 @@
-package com.raul.bupt.simi.dataobject;
+package com.raul.bupt.calculate.simi.dataobject;
 
 import com.raul.bupt.parser.dataobject.RelationDO;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 

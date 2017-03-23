@@ -1,4 +1,4 @@
-package com.raul.bupt.simi.impl.simi;
+package com.raul.bupt.calculate.simi.impl.simi;
 
 /**
  * Created by Administrator on 2017/3/23.

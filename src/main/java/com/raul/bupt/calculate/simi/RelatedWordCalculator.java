@@ -1,6 +1,6 @@
-package com.raul.bupt.simi;
+package com.raul.bupt.calculate.simi;
 
-import com.raul.bupt.simi.dataobject.RelationWord;
+import com.raul.bupt.calculate.simi.dataobject.RelationWord;
 
 import java.util.List;
 

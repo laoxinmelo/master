@@ -1,9 +1,9 @@
-package com.raul.bupt.simi.impl;
+package com.raul.bupt.calculate.simi.impl;
 
 import com.raul.bupt.parser.dataobject.RelationDO;
-import com.raul.bupt.simi.RelatedWordCalculator;
-import com.raul.bupt.simi.dataobject.GrammarRelationSet;
-import com.raul.bupt.simi.dataobject.RelationWord;
+import com.raul.bupt.calculate.simi.RelatedWordCalculator;
+import com.raul.bupt.calculate.simi.dataobject.GrammarRelationSet;
+import com.raul.bupt.calculate.simi.dataobject.RelationWord;
 
 import java.io.EOFException;
 import java.io.FileInputStream;

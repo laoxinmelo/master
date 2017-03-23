@@ -1,4 +1,4 @@
-package com.raul.bupt.simi;
+package com.raul.bupt.calculate.simi;
 
 /**
  *

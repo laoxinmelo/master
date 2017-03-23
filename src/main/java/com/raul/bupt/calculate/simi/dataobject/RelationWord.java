@@ -1,4 +1,4 @@
-package com.raul.bupt.simi.dataobject;
+package com.raul.bupt.calculate.simi.dataobject;
 
 /**
  * Created by Administrator on 2017/3/22.
