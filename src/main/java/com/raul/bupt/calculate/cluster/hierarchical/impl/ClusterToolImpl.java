@@ -1,7 +1,7 @@
-package com.cluster.hierarchical.impl;
+package com.raul.bupt.calculate.cluster.hierarchical.impl;
 
-import com.cluster.hierarchical.ClusterTool;
-import com.cluster.hierarchical.dataobject.ClusterIndex;
+import com.raul.bupt.calculate.cluster.hierarchical.ClusterTool;
+import com.raul.bupt.calculate.cluster.hierarchical.dataobject.ClusterIndex;
 
 import java.util.*;
 
