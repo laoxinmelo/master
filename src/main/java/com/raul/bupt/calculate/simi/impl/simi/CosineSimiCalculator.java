@@ -15,12 +15,12 @@ public class CosineSimiCalculator extends AbstractSimiCalculator {
      *
      * @param relationWordList1
      * @param relationWordList2
+     * @param sameRelationWordList
      * @return
      */
     @Override
-    public double calculateSimilarity(List<RelationWord> relationWordList1, List<RelationWord> relationWordList2)  {
-        return 0;
+    public double calculateSimilarity(List<RelationWord> relationWordList1, List<RelationWord> relationWordList2, List<RelationWord> sameRelationWordList)  {
+        return Double.valueOf(sameRelationWordList.size()) / Math.sqrt(Double.valueOf(relationWordList1.size()*relationWordList2.size()));
     }
-
 
 }

@@ -1,8 +1,8 @@
 package com.raul.bupt.calculate.simi;
 
 import com.raul.bupt.calculate.simi.dataobject.RelationWord;
+import com.raul.bupt.calculate.simi.dataobject.SameRelationWord;
 
-import javax.management.relation.Relation;
 import java.util.List;
 
 /**
@@ -17,9 +17,10 @@ public interface SimiCalculator {
      *
      * @param relationWordList1
      * @param relationWordList2
+     * @param sameRelationWordList
      * @return
      */
-    double calculateSimilarity(List<RelationWord> relationWordList1,List<RelationWord> relationWordList2) ;
+    double calculateSimilarity(List<RelationWord> relationWordList1,List<RelationWord> relationWordList2, List<RelationWord> sameRelationWordList) ;
 
 
     /**
@@ -29,5 +30,5 @@ public interface SimiCalculator {
      * @param relationWordList2
      * @return
      */
-    List<RelationWord> calculateSameRelationWordNum(List<RelationWord> relationWordList1, List<RelationWord> relationWordList2);
+    List<SameRelationWord> calculateSameRelationWordNum(List<RelationWord> relationWordList1, List<RelationWord> relationWordList2);
 }

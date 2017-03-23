@@ -1,6 +1,7 @@
 package com.raul.bupt.calculate.simi.dataobject;
 
 /**
+ * 属于某个词相关词列表的DO
  * Created by Administrator on 2017/3/22.
  */
 public class RelationWord {
