@@ -46,7 +46,7 @@ public class ClusterToolImpl implements ClusterTool {
 
         Set<String> wordSet = vectorMap.keySet();
 
-        String maxIndex = "";
+//        String maxIndex = "";
         float maxValue = 0;
         String word1 = "";
         String word2 = "";
