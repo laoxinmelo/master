@@ -20,7 +20,7 @@ public interface SimiCalculator {
      * @param sameRelationWordList
      * @return
      */
-    double calculateSimilarity(List<RelationWord> relationWordList1,List<RelationWord> relationWordList2, List<RelationWord> sameRelationWordList) ;
+    double calculateSimilarity(List<RelationWord> relationWordList1,List<RelationWord> relationWordList2, List<SameRelationWord> sameRelationWordList) ;
 
 
     /**

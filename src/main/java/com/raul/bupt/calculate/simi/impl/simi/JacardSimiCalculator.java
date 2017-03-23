@@ -1,6 +1,8 @@
 package com.raul.bupt.calculate.simi.impl.simi;
 
 import com.raul.bupt.calculate.simi.dataobject.RelationWord;
+import com.raul.bupt.calculate.simi.dataobject.SameRelationWord;
+import com.raul.bupt.calculate.simi.impl.AbstractSimiCalculator;
 
 import java.util.List;
 
@@ -18,7 +20,12 @@ public class JacardSimiCalculator extends AbstractSimiCalculator {
      * @return
      */
     @Override
-    public double calculateSimilarity(List<RelationWord> relationWordList1, List<RelationWord> relationWordList2, List<RelationWord> sameRelationWordList)  {
+    public double calculateSimilarity(List<RelationWord> relationWordList1, List<RelationWord> relationWordList2, List<SameRelationWord> sameRelationWordList)  {
+
+        if(sameRelationWordList.size() == 0) {
+            return 0;
+        }
+
         return Double.valueOf(sameRelationWordList.size()) / Double.valueOf(relationWordList1.size() + relationWordList2.size() - sameRelationWordList.size());
     }
 }

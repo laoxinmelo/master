@@ -1,4 +1,4 @@
-package com.raul.bupt.calculate.simi.impl.simi;
+package com.raul.bupt.calculate.simi.impl;
 
 import com.raul.bupt.calculate.simi.SimiCalculator;
 import com.raul.bupt.calculate.simi.dataobject.RelationWord;
@@ -20,7 +20,7 @@ public abstract class AbstractSimiCalculator implements SimiCalculator {
      * @param sameRelationWordList
      * @return
      */
-    public double calculateSimilarity(List<RelationWord> relationWordList1,List<RelationWord> relationWordList2, List<RelationWord> sameRelationWordList) {
+    public double calculateSimilarity(List<RelationWord> relationWordList1,List<RelationWord> relationWordList2, List<SameRelationWord> sameRelationWordList) {
         return 0;
     }
 
