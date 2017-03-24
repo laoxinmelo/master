@@ -2,11 +2,9 @@ package com.raul.bupt.calculate.clusters.methods.theirs.impl;
 
 import com.raul.bupt.calculate.clusters.methods.dataobject.ClusterIndex;
 import com.raul.bupt.calculate.clusters.methods.theirs.ClusterToolOldMethod;
-import com.raul.bupt.calculate.simi.RelatedWordCalculator;
 import com.raul.bupt.calculate.simi.SimiCalculator;
 import com.raul.bupt.calculate.simi.dataobject.RelationWord;
 import com.raul.bupt.calculate.simi.dataobject.SameRelationWord;
-import com.raul.bupt.calculate.simi.impl.RelatedWordCalculatorImpl;
 import com.raul.bupt.calculate.simi.impl.simi.*;
 
 import java.util.ArrayList;
@@ -18,8 +16,6 @@ import java.util.Set;
  * Created by Administrator on 2017/3/24.
  */
 public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
-
-    private static final RelatedWordCalculator relatedWordCalculator = new RelatedWordCalculatorImpl();
 
     private static final int simiCalculatorIndex = 1; //所选用的相似度计算方法索引
 
