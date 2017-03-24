@@ -1,4 +1,4 @@
-package com.raul.bupt.calculate.cluster.methods.ours;
+package com.raul.bupt.calculate.clusters.methods.ours;
 
 import java.util.Map;
 

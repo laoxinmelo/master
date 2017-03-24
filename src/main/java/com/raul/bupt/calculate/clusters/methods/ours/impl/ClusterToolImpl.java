@@ -1,7 +1,7 @@
-package com.raul.bupt.calculate.cluster.methods.ours.impl;
+package com.raul.bupt.calculate.clusters.methods.ours.impl;
 
-import com.raul.bupt.calculate.cluster.methods.ours.ClusterTool;
-import com.raul.bupt.calculate.cluster.methods.ours.dataobject.ClusterIndex;
+import com.raul.bupt.calculate.clusters.methods.ours.ClusterTool;
+import com.raul.bupt.calculate.clusters.methods.dataobject.ClusterIndex;
 
 import java.util.*;
 
