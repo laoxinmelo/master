@@ -24,6 +24,6 @@ public interface ClusterToolOldMethod {
      * @param map
      * @param threshold
      */
-    void hierarchicalCluster(Map<String,List<RelationWord>> map, float threshold);
+    void hierarchicalCluster(Map<String,List<RelationWord>[]> map, float threshold);
 
 }

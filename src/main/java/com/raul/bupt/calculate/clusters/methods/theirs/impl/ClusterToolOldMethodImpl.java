@@ -50,7 +50,7 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
      * 进行一次层次聚类的计算
      * @param wordMap
      */
-    private ClusterIndex clusterCalculate(Map<String,List<RelationWord>> wordMap) {
+    private ClusterIndex clusterCalculate(Map<String,List<RelationWord>[]> wordMap) {
         if (wordMap == null) {
             throw new NullPointerException("npe");
         }
@@ -72,10 +72,18 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
                     continue;
                 }
 
-                List<RelationWord> relationWordList1 = wordMap.get(word);
-                List<RelationWord> relationWordList2 = wordMap.get(otherWord);
+                double simiValue = 0.0;
 
-                double simiValue = getSimi(relationWordList1,relationWordList2);
+                List<RelationWord>[] relationWordListArray1 = wordMap.get(word);
+                List<RelationWord>[] relationWordListArray2 = wordMap.get(otherWord);
+
+                for(List<RelationWord> relationWordList1:relationWordListArray1) {
+                    for(List<RelationWord> relationWordList2:relationWordListArray2) {
+                        simiValue += getSimi(relationWordList1,relationWordList2);
+                    }
+                }
+
+                simiValue = simiValue/(relationWordListArray1.length+relationWordListArray2.length);
                 if(simiValue > maxValue) {
                     word1 = word;
                     word2 = otherWord;
@@ -101,7 +109,7 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
      * @param map
      * @param threshold
      */
-    public void hierarchicalCluster(Map<String,List<RelationWord>> map, float threshold) {
+    public void hierarchicalCluster(Map<String,List<RelationWord>[]> map, float threshold) {
         return ;
     }
 }
