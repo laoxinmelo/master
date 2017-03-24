@@ -8,15 +8,15 @@ import java.util.Map;
 /**
  * Created by Administrator on 2017/3/24.
  */
-public interface ClusterTool {
+public interface ClusterToolOldMethod {
 
     /**
-     * 计算两个向量之间的余弦距离
+     * 运用各类传统方法，计算两个向量之间的余弦距离
      * @param relationWordList1
      * @param relationWordList2
      * @return
      */
-    public float getSimi(List<RelationWord> relationWordList1, List<RelationWord> relationWordList2);
+    List<Double> getSimi(List<RelationWord> relationWordList1, List<RelationWord> relationWordList2);
 
 
     /**
@@ -24,6 +24,6 @@ public interface ClusterTool {
      * @param map
      * @param threshold
      */
-    public void hierarchicalCluster(Map<String,List<RelationWord>> map, float threshold);
+    void hierarchicalCluster(Map<String,List<RelationWord>> map, float threshold);
 
 }

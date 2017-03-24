@@ -1,6 +1,6 @@
 package com.raul.bupt.calculate.clusters.methods.ours.impl;
 
-import com.raul.bupt.calculate.clusters.methods.ours.ClusterTool;
+import com.raul.bupt.calculate.clusters.methods.ours.ClusterToolNewMethod;
 import com.raul.bupt.calculate.clusters.methods.dataobject.ClusterIndex;
 
 import java.util.*;
@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Created by Administrator on 2016/11/16.
  */
-public class ClusterToolImpl implements ClusterTool {
+public class ClusterToolNewMethodImpl implements ClusterToolNewMethod {
 
     //用来对两个词之间进行分隔
     private static final String indexTag = "_";
@@ -39,7 +39,7 @@ public class ClusterToolImpl implements ClusterTool {
      * 进行一次层次聚类的计算
      * @param vectorMap
      */
-    public ClusterIndex clusterCalculate(Map<String,float[][]> vectorMap) {
+    private ClusterIndex clusterCalculate(Map<String,float[][]> vectorMap) {
         if(vectorMap == null) {
             throw new NullPointerException("npe");
         }
@@ -131,17 +131,5 @@ public class ClusterToolImpl implements ClusterTool {
         }
     }
 
-//    public static void main(String[] args) {
-//
-//        ClusterTool clusterTool = new ClusterToolImpl();
-//
-//        float[][] x1 = {{1,2,3}};
-//        float[][] x2 = {{1,2,3}};
-//
-//        Map<String,float[][]> vectorMap = new HashMap<String, float[][]>();
-//        vectorMap.put("x1",x1);
-//        vectorMap.put("x2",x2);
-//
-//        clusterTool.hierarchicalCluster(vectorMap,0);
-//    }
+
 }

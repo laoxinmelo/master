@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * Created by Administrator on 2016/11/16.
  */
-public interface ClusterTool {
+public interface ClusterToolNewMethod {
 
     /**
      * 计算两个向量之间的余弦距离
