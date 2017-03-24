@@ -36,7 +36,7 @@ public class FeatureExtract {
 
 
     public static void main(String[] args) throws Exception{
-//        featureExtract4PC();
+//        featureExtract();
         grammarExtract();
     }
 

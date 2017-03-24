@@ -23,6 +23,8 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
 
     private static final int simiCalculatorIndex = 1; //所选用的相似度计算方法索引
 
+    private static final String indexTag = "_";
+
     private static final List<SimiCalculator> simiCalculatorList = new ArrayList<SimiCalculator>();
     static {
         simiCalculatorList.add(new CosineSimiCalculator());
@@ -106,10 +108,46 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
 
     /**
      * 进行层次聚类
-     * @param map
+     * @param wordMap
      * @param threshold
      */
-    public void hierarchicalCluster(Map<String,List<RelationWord>[]> map, float threshold) {
-        return ;
+    public void hierarchicalCluster(Map<String,List<RelationWord>[]> wordMap, float threshold) {
+
+        ClusterIndex clusterIndex = clusterCalculate(wordMap);
+        while(clusterIndex.getMaxSimi() >= threshold) {
+
+            /**
+             * 将融合为一个簇的另外两个簇删掉
+             */
+            String word1 = clusterIndex.getElement1();
+            String word2 = clusterIndex.getElement2();
+
+            List<RelationWord>[] relationWordListArray1 = wordMap.get(word1);
+            List<RelationWord>[] relationWordListArray2 = wordMap.get(word2);
+
+            List<List<RelationWord>> tempRelationWordList = new ArrayList<List<RelationWord>>();
+            for(List<RelationWord> relationWordList:relationWordListArray1) {
+                tempRelationWordList.add(relationWordList);
+            }
+            for(List<RelationWord> relationWordList:relationWordListArray2) {
+                tempRelationWordList.add(relationWordList);
+            }
+            List<RelationWord>[] relationWordListArray = (List<RelationWord>[]) tempRelationWordList.toArray();
+
+            wordMap.remove(word1);
+            wordMap.remove(word2);
+            wordMap.put(word1 + indexTag + word2, relationWordListArray);
+
+            if (wordMap.size() > 1) {
+                clusterIndex = clusterCalculate(wordMap);
+            }else {
+                break;
+            }
+        }
+
+        for(String word:wordMap.keySet()) {
+            System.out.println(word);
+        }
+
     }
 }
