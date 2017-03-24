@@ -13,7 +13,7 @@ public interface ClusterToolNewMethod {
      * @param vector2
      * @return
      */
-    public float getSimi(float[] vector1, float[] vector2);
+    double getSimi(float[] vector1, float[] vector2);
 
 
     /**
@@ -21,5 +21,5 @@ public interface ClusterToolNewMethod {
      * @param map
      * @param threshold
      */
-    public void hierarchicalCluster(Map<String,float[][]> map,float threshold);
+    void hierarchicalCluster(Map<String,float[][]> map,float threshold);
 }

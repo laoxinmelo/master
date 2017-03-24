@@ -7,13 +7,13 @@ public class ClusterIndex {
 
     private String element1;  //实现聚类的第1个簇
     private String element2;  //实现聚类的第2个簇
-    private float maxSimi; //两个簇之间的相似度
+    private double maxSimi; //两个簇之间的相似度
 
-    public float getMaxSimi() {
+    public double getMaxSimi() {
         return maxSimi;
     }
 
-    public void setMaxSimi(float maxSimi) {
+    public void setMaxSimi(double maxSimi) {
         this.maxSimi = maxSimi;
     }
 

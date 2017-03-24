@@ -19,7 +19,7 @@ public class ClusterToolNewMethodImpl implements ClusterToolNewMethod {
      * @param f2
      * @return
      */
-    public float getSimi(float[] f1, float[] f2) {
+    public double getSimi(float[] f1, float[] f2) {
         float dist = 0;
         float temp1 = 0;
         float temp2 = 0;
@@ -46,8 +46,7 @@ public class ClusterToolNewMethodImpl implements ClusterToolNewMethod {
 
         Set<String> wordSet = vectorMap.keySet();
 
-//        String maxIndex = "";
-        float maxValue = 0;
+        double maxValue = 0;
         String word1 = "";
         String word2 = "";
 

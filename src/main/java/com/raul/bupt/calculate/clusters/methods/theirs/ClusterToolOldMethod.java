@@ -16,7 +16,7 @@ public interface ClusterToolOldMethod {
      * @param relationWordList2
      * @return
      */
-    List<Double> getSimi(List<RelationWord> relationWordList1, List<RelationWord> relationWordList2);
+    double getSimi(List<RelationWord> relationWordList1, List<RelationWord> relationWordList2);
 
 
     /**
