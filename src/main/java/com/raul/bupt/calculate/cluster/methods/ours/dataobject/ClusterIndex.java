@@ -1,4 +1,4 @@
-package com.raul.bupt.calculate.cluster.hierarchical.dataobject;
+package com.raul.bupt.calculate.cluster.methods.ours.dataobject;
 
 /**
  * Created by Administrator on 2016/11/16.

@@ -1,4 +1,4 @@
-package com.raul.bupt.calculate.cluster.hierarchical;
+package com.raul.bupt.calculate.cluster.methods.ours;
 
 import java.util.Map;
 
