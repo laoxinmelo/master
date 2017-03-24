@@ -116,9 +116,7 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
         ClusterIndex clusterIndex = clusterCalculate(wordMap);
         while(clusterIndex.getMaxSimi() >= threshold) {
 
-            /**
-             * 将融合为一个簇的另外两个簇删掉
-             */
+
             String word1 = clusterIndex.getElement1();
             String word2 = clusterIndex.getElement2();
 
@@ -134,6 +132,9 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
             }
             List<RelationWord>[] relationWordListArray = (List<RelationWord>[]) tempRelationWordList.toArray();
 
+            /**
+             * 将融合为一个簇的另外两个簇删掉
+             */
             wordMap.remove(word1);
             wordMap.remove(word2);
             wordMap.put(word1 + indexTag + word2, relationWordListArray);
