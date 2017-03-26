@@ -87,7 +87,7 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
         System.out.println(word + ":");
 
         try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("./result/relationWord/" + word));
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("result/relationWord/" + word));
 
 
             for (String candidateWord : wordSet) {
@@ -145,7 +145,7 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
 
             objectOutputStream.flush();  objectOutputStream.close();
         }catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         System.out.println("______________________________________");
