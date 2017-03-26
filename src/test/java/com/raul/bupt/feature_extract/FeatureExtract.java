@@ -69,6 +69,7 @@ public class FeatureExtract {
                 if(content == null) {
                     continue;
                 }
+
                 String[] contentArray = content.split("\r\n");
                 if (contentArray.length == 3) {
                     try {
@@ -77,12 +78,18 @@ public class FeatureExtract {
                             objectOutputStream.writeObject(relationDO);
                         }
                         System.out.println(itemId + "   " + reviewId + "    " + (++totalCount));
+
                     } catch (OutOfMemoryError e) {
                         e.printStackTrace();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
+
+            }
+
+            if(totalCount > 50000) {
+                break;
             }
         }
 

@@ -5,9 +5,7 @@ import com.raul.bupt.calculate.simi.RelatedWordCalculator;
 import com.raul.bupt.calculate.simi.dataobject.GrammarRelationSet;
 import com.raul.bupt.calculate.simi.dataobject.RelationWord;
 
-import java.io.EOFException;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +19,7 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
     //语料中的所有RelationDO
     private static final GrammarRelationSet grammarRelationSet = getGrammarRelationSet();
     //RelationDO保存路径
-    private static final String grammarSavePath = "E:\\Project\\JavaProject\\master\\result\\grammarList";
+    private static final String grammarSavePath = "./result/grammarList";
 
 
     /**
@@ -50,6 +48,7 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
 
                     String depWord = relationDO.getDepWordDO().getWord();
                     String govWord = relationDO.getGovWordDO().getWord();
+
                     wordSet.add(depWord);
                     wordSet.add(govWord);
 
@@ -86,59 +85,70 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
 
         List<RelationWord> relationWordList = new ArrayList<RelationWord>();
         System.out.println(word + ":");
-        for(String candidateWord:wordSet) {
-            if(candidateWord.equals(word)) {
-                continue;
-            }
 
-            for(String relationName:relationSet) {
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("./result/relationWord/" + word));
 
-                int WordRelationCandidateWord = 0;  //包含了输入词、候选词以及相关语义关系的数量
-                int AnywordRelationAnyword = 0;  //包含了相关语义关系的数量
-                int WordRelationAnyword = 0;  //包含了输入词、相关语义关系的数量
-                int AnywordRelationCandidateWord = 0;  //包含了候选词、相关语义关系的数量
 
-                for(RelationDO relationDO:relationDOList) {
-
-                    String DORealtionName = relationDO.getRelationName();
-                    String DOGovWord = relationDO.getGovWordDO().getWord();
-                    String DODepWord = relationDO.getDepWordDO().getWord();
-
-                    if(!DORealtionName.equals(relationName)) {
-                        continue;
-                    }
-
-                    AnywordRelationAnyword++;
-
-                    if(DOGovWord.equals(word)) {
-                        WordRelationAnyword++;
-                    }
-
-                    if(DODepWord.equals(candidateWord)) {
-                        AnywordRelationCandidateWord++;
-                    }
-
-                    if(DOGovWord.equals(word) && DODepWord.equals(candidateWord)) {
-                        WordRelationCandidateWord++;
-                    }
+            for (String candidateWord : wordSet) {
+                if (candidateWord.equals(word)) {
+                    continue;
                 }
 
-                double numerator = Double.valueOf(WordRelationCandidateWord*AnywordRelationAnyword);
-                double denominator = Double.valueOf(WordRelationAnyword*AnywordRelationCandidateWord);
-                if(denominator > 0) {
+                for (String relationName : relationSet) {
 
-                    double value = Math.log(numerator/denominator+1);
-                    if(value>0) {
-                        RelationWord relationWord = new RelationWord(relationName,candidateWord,value);
-                        relationWordList.add(relationWord);
-                        System.out.println(word + "   " + relationName + " " + candidateWord + "    " + value);
+                    int WordRelationCandidateWord = 0;  //包含了输入词、候选词以及相关语义关系的数量
+                    int AnywordRelationAnyword = 0;  //包含了相关语义关系的数量
+                    int WordRelationAnyword = 0;  //包含了输入词、相关语义关系的数量
+                    int AnywordRelationCandidateWord = 0;  //包含了候选词、相关语义关系的数量
+
+                    for (RelationDO relationDO : relationDOList) {
+
+                        String DORealtionName = relationDO.getRelationName();
+                        String DOGovWord = relationDO.getGovWordDO().getWord();
+                        String DODepWord = relationDO.getDepWordDO().getWord();
+
+                        if (!DORealtionName.equals(relationName)) {
+                            continue;
+                        }
+
+                        AnywordRelationAnyword++;
+
+                        if (DOGovWord.equals(word)) {
+                            WordRelationAnyword++;
+                        }
+
+                        if (DODepWord.equals(candidateWord)) {
+                            AnywordRelationCandidateWord++;
+                        }
+
+                        if (DOGovWord.equals(word) && DODepWord.equals(candidateWord)) {
+                            WordRelationCandidateWord++;
+                        }
+                    }
+
+                    double numerator = Double.valueOf(WordRelationCandidateWord * AnywordRelationAnyword);
+                    double denominator = Double.valueOf(WordRelationAnyword * AnywordRelationCandidateWord);
+
+                    if (denominator > 0) {
+
+                        double value = Math.log(numerator / denominator + 1);
+                        if (value > 0) {
+                            RelationWord relationWord = new RelationWord(relationName, candidateWord, value);
+                            relationWordList.add(relationWord);
+                            objectOutputStream.writeObject(relationWord);
+                            System.out.println(word + "   " + relationName + " " + candidateWord + "    " + value);
+                        }
                     }
                 }
             }
+
+            objectOutputStream.flush();  objectOutputStream.close();
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
         System.out.println("______________________________________");
-
         return relationWordList;
 
     }
