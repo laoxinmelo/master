@@ -75,7 +75,7 @@ public class OldMethodFirstClusterApply {
 
         Map<String,List<RelationWord>[]> featureMap = getFeatureMap();
 
-        clusterTool.hierarchicalCluster(featureMap,threshold);
+//        clusterTool.hierarchicalCluster(featureMap,threshold);
     }
 
 }
