@@ -16,14 +16,14 @@ import java.util.Set;
  */
 public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
 
-    //è¯­æ–™ä¸­çš„æ‰€æœ‰RelationDO
+    //ÓïÁÏÖĞµÄËùÓĞRelationDO
     private static final GrammarRelationSet grammarRelationSet = getGrammarRelationSet();
-    //RelationDOä¿å­˜è·¯å¾„
+    //RelationDO±£´æÂ·¾¶
     private static final String grammarSavePath = "./result/grammarList";
 
 
     /**
-     * è·å–è¯­æ–™ä¸­æ‰€å¯¹åº”çš„wordList,relationList,relationDOList
+     * »ñÈ¡ÓïÁÏÖĞËù¶ÔÓ¦µÄwordList,relationList,relationDOList
      *
      * @return
      */
@@ -46,8 +46,8 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
                     String relationName = relationDO.getRelationName();
                     relationSet.add(relationName);
 
-                    String depWord = relationDO.getDepWordDO().getWord();
-                    String govWord = relationDO.getGovWordDO().getWord();
+                    String depWord = relationDO.getDepWordDO().getWord().trim();
+                    String govWord = relationDO.getGovWordDO().getWord().trim();
 
                     wordSet.add(depWord);
                     wordSet.add(govWord);
@@ -67,7 +67,7 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
 
 
     /**
-     * è®¡ç®—ä¸ä¹‹ç›¸å…³çš„æ‰€æœ‰RelationWordé›†åˆ
+     * ¼ÆËãÓëÖ®Ïà¹ØµÄËùÓĞRelationWord¼¯ºÏ
      *
      * @param word
      * @return
@@ -97,10 +97,10 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
 
                 for (String relationName : relationSet) {
 
-                    int WordRelationCandidateWord = 0;  //åŒ…å«äº†è¾“å…¥è¯ã€å€™é€‰è¯ä»¥åŠç›¸å…³è¯­ä¹‰å…³ç³»çš„æ•°é‡
-                    int AnywordRelationAnyword = 0;  //åŒ…å«äº†ç›¸å…³è¯­ä¹‰å…³ç³»çš„æ•°é‡
-                    int WordRelationAnyword = 0;  //åŒ…å«äº†è¾“å…¥è¯ã€ç›¸å…³è¯­ä¹‰å…³ç³»çš„æ•°é‡
-                    int AnywordRelationCandidateWord = 0;  //åŒ…å«äº†å€™é€‰è¯ã€ç›¸å…³è¯­ä¹‰å…³ç³»çš„æ•°é‡
+                    int WordRelationCandidateWord = 0;  //°üº¬ÁËÊäÈë´Ê¡¢ºòÑ¡´ÊÒÔ¼°Ïà¹ØÓïÒå¹ØÏµµÄÊıÁ¿
+                    int AnywordRelationAnyword = 0;  //°üº¬ÁËÏà¹ØÓïÒå¹ØÏµµÄÊıÁ¿
+                    int WordRelationAnyword = 0;  //°üº¬ÁËÊäÈë´Ê¡¢Ïà¹ØÓïÒå¹ØÏµµÄÊıÁ¿
+                    int AnywordRelationCandidateWord = 0;  //°üº¬ÁËºòÑ¡´Ê¡¢Ïà¹ØÓïÒå¹ØÏµµÄÊıÁ¿
 
                     for (RelationDO relationDO : relationDOList) {
 

@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/corpus/neg/Negation.txt" charset="GBK" />
     <file url="file://$PROJECT_DIR$/corpus/stopword/中文停用词表.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/raul/bupt/calculate/simi/impl/RelatedWordCalculatorImpl.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/src/test/java/com/raul/bupt/feature_extract/FeatureExtract.java" charset="UTF-8" />
   </component>
 </project>

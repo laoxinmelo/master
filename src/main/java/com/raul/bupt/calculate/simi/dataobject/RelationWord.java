@@ -1,10 +1,12 @@
 package com.raul.bupt.calculate.simi.dataobject;
 
+import java.io.Serializable;
+
 /**
  * 属于某个词相关词列表的DO
  * Created by Administrator on 2017/3/22.
  */
-public class RelationWord {
+public class RelationWord implements Serializable {
 
     private String relationName;  //语义关系名称
 

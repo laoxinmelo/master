@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
 
-    private static final int simiCalculatorIndex = 1; //所选用的相似度计算方法索引
+    private int simiCalculatorIndex; //所选用的相似度计算方法索引
 
     private static final String indexTag = "_";
 
@@ -28,6 +28,11 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
         simiCalculatorList.add(new DekangSimiCalculator());
         simiCalculatorList.add(new HindlerSimiCalculator());
         simiCalculatorList.add(new JacardSimiCalculator());
+    }
+
+
+    public ClusterToolOldMethodImpl(int simiCalculatorIndex) {
+        this.simiCalculatorIndex = simiCalculatorIndex;
     }
 
 
