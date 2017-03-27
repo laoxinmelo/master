@@ -38,7 +38,7 @@ public class NounCounter {
      *
      * @return
      */
-    private static Set getItemIdSet() {
+    public static Set getItemIdSet() {
 
         String fileSavePath = "E:\\Project\\JavaProject\\master\\result\\testItemId";
 

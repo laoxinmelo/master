@@ -7,29 +7,30 @@ import com.raul.bupt.db.impl.RedisToolImpl;
 import com.raul.bupt.parser.dataobject.RelationDO;
 import com.raul.bupt.parser.dataobject.WordDO;
 import com.raul.bupt.word2vec.Word2VEC;
+import com.raul.bupt.word_freq.NounCounter;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 对于所提取的候选特征词，完成筛选过后，对初次聚类分析所得的簇进行扩充
  * Created by Administrator on 2016/11/17.
  */
 
-public class NewMethodClusterApply {
+public class NewMethodSecondClusterApply {
 
     //初始特征聚类结果
-    private static final String originFeatureSavePath = "result/originFeature.txt";
+    private static final String originFeatureSavePath = "result/startAttribute.txt";
     //word2vec模型存放位置
-    private static final String vecModelPath = "library\\model\\testReviewVector";
+    private static final String vecModelPath = "library/model/testReviewVector";
     //特征存放位置
     private static final String itemFeatureSavePath = "result/feature/";
     //所得特征提取结果的保存位置
     private static final String featureTableSavePath = "result/result/featureTable.txt";
     //候选特征词保存位置
     private static final String candFeatureSavePath = "result/candAttribute.txt";
-
     //redis库操作工具
     private static final RedisTool redisTool = new RedisToolImpl();
 
@@ -43,6 +44,9 @@ public class NewMethodClusterApply {
     private static final double simiThreshold = 0.4;
     //所提取特征在redis中的存放位置
     private static final int featureRedisIndex = 5;
+
+
+    private static final Set<String> itemIdSet = NounCounter.getItemIdSet();
 
     //保存各个簇的特征词
     private static List<String> clusterList = getOriginFeatureCluster();
@@ -118,6 +122,11 @@ public class NewMethodClusterApply {
         try {
             File[] files = new File(itemFeatureSavePath).listFiles();
             for(File file:files) {
+
+                if(!itemIdSet.contains(file.getName())) {
+                    continue;
+                }
+
                 ObjectInputStream oos = new ObjectInputStream(new FileInputStream(itemFeatureSavePath + file.getName()));
                 int featureNum = oos.readInt();
                 int count = 0;
