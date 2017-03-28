@@ -53,7 +53,7 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
      * 进行一次层次聚类的计算
      * @param wordMap
      */
-    private ClusterIndex clusterCalculate(Map<String,List<RelationWord>[]> wordMap) {
+    private ClusterIndex clusterCalculate(Map<String,List<ArrayList<RelationWord>>> wordMap) {
         if (wordMap == null) {
             throw new NullPointerException("npe");
         }
@@ -77,8 +77,8 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
 
                 double simiValue = 0.0;
 
-                List<RelationWord>[] relationWordListArray1 = wordMap.get(word);
-                List<RelationWord>[] relationWordListArray2 = wordMap.get(otherWord);
+                List<ArrayList<RelationWord>> relationWordListArray1 = wordMap.get(word);
+                List<ArrayList<RelationWord>> relationWordListArray2 = wordMap.get(otherWord);
 
                 for(List<RelationWord> relationWordList1:relationWordListArray1) {
                     for(List<RelationWord> relationWordList2:relationWordListArray2) {
@@ -86,7 +86,7 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
                     }
                 }
 
-                simiValue = simiValue/(relationWordListArray1.length+relationWordListArray2.length);
+                simiValue = simiValue/(relationWordListArray1.size()+relationWordListArray2.size());
                 if(simiValue > maxValue) {
                     word1 = word;
                     word2 = otherWord;
@@ -112,7 +112,7 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
      * @param wordMap
      * @param threshold
      */
-    public void hierarchicalCluster(Map<String,List<RelationWord>[]> wordMap, float threshold) {
+    public void hierarchicalCluster(Map<String,List<ArrayList<RelationWord>>> wordMap, float threshold) {
 
         ClusterIndex clusterIndex = clusterCalculate(wordMap);
         while(clusterIndex.getMaxSimi() >= threshold) {
@@ -121,17 +121,12 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
             String word1 = clusterIndex.getElement1();
             String word2 = clusterIndex.getElement2();
 
-            List<RelationWord>[] relationWordListArray1 = wordMap.get(word1);
-            List<RelationWord>[] relationWordListArray2 = wordMap.get(word2);
+            List<ArrayList<RelationWord>> relationWordListArray1 = wordMap.get(word1);
+            List<ArrayList<RelationWord>> relationWordListArray2 = wordMap.get(word2);
 
-            List<List<RelationWord>> tempRelationWordList = new ArrayList<List<RelationWord>>();
-            for(List<RelationWord> relationWordList:relationWordListArray1) {
-                tempRelationWordList.add(relationWordList);
-            }
-            for(List<RelationWord> relationWordList:relationWordListArray2) {
-                tempRelationWordList.add(relationWordList);
-            }
-            List<RelationWord>[] relationWordListArray = (List<RelationWord>[]) tempRelationWordList.toArray();
+            List<ArrayList<RelationWord>> relationWordListArray = new ArrayList<ArrayList<RelationWord>>();
+            relationWordListArray.addAll(relationWordListArray1);
+            relationWordListArray.addAll(relationWordListArray2);
 
             /**
              * 将融合为一个簇的另外两个簇删掉

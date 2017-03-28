@@ -2,9 +2,7 @@ package com.raul.bupt.apply;
 
 import com.raul.bupt.calculate.clusters.methods.theirs.ClusterToolOldMethod;
 import com.raul.bupt.calculate.clusters.methods.theirs.impl.ClusterToolOldMethodImpl;
-import com.raul.bupt.calculate.simi.RelatedWordCalculator;
 import com.raul.bupt.calculate.simi.dataobject.RelationWord;
-import com.raul.bupt.calculate.simi.impl.RelatedWordCalculatorImpl;
 
 import java.io.*;
 import java.util.*;
@@ -17,48 +15,87 @@ public class OldMethodFirstClusterApply {
     //层次聚类工具
     private static final ClusterToolOldMethod clusterTool = new ClusterToolOldMethodImpl(0);
 
-    private static final RelatedWordCalculator relatedWordCalculator = new RelatedWordCalculatorImpl();
+//    private static final RelatedWordCalculator relatedWordCalculator = new RelatedWordCalculatorImpl();
 
     //初始特征的保存路径
     private static final String attributePath = "result/startAttribute.txt";
+
+    //初始特征对应RelationWord的保存路径
+    private static final String relationWordSavePath = "result/relationWord/";
 
     //阈值
     private static final float threshold = Float.valueOf("0.4");
 
     /**
+     * 计算所有候选特征词的RelationWord并保存
      * 获取所有初始特征
      * @return
      */
-    private static void getFeatureMap() throws Exception{
+//    private static void calculateRelationWord() throws Exception{
+//        InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(new File(attributePath)));
+//        BufferedReader br = new BufferedReader(inputStreamReader);
+//        String temp = br.readLine();
+//        temp = br.readLine();
+//
+//        while(temp != null) {
+//            String word = temp.trim();
+//            List<RelationWord> relationWordList = relatedWordCalculator.calculateRelatedWordList(word);
+//
+//            temp = br.readLine();
+//        }
+//        br.close();
+//    }
+
+
+    /**
+     *
+     * 获取所有候选特征词所对应的RelationWordList
+     * @return
+     */
+    private static Map<String,List<ArrayList<RelationWord>>> getFeatureMap() throws Exception{
         InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(new File(attributePath)));
         BufferedReader br = new BufferedReader(inputStreamReader);
         String temp = br.readLine();
-//        Map<String,List<RelationWord>[]> featureMap = new HashMap<String,List<RelationWord>[]>();
+        Map<String,List<ArrayList<RelationWord>>> featureMap = new HashMap<String,List<ArrayList<RelationWord>>>();
 
         temp = br.readLine();
         while(temp != null) {
 
             String word = temp.trim();
-            List<RelationWord> relationWordList = relatedWordCalculator.calculateRelatedWordList(word);
+            ArrayList<RelationWord> relationWordList = new ArrayList<RelationWord>();
 
-//            List<List<RelationWord>> tempRelationWordList = new ArrayList<List<RelationWord>>();
-//            tempRelationWordList.add(relationWordList);
-//            List<RelationWord>[] relationWordListArray = (List<RelationWord>[]) tempRelationWordList.toArray();
-//            featureMap.put(word, relationWordListArray);
+            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(relationWordSavePath + word));
+
+            while(true) {
+                try {
+                    RelationWord relationWord = (RelationWord) objectInputStream.readObject();
+                    relationWordList.add(relationWord);
+                }catch (EOFException e) {
+                    break;
+                }
+
+            }
+
+            List<ArrayList<RelationWord>> relationWordArray = new ArrayList<ArrayList<RelationWord>>();
+            relationWordArray.add(relationWordList);
+
+            featureMap.put(word, relationWordArray);
 
             temp = br.readLine();
         }
         br.close();
+
+        return featureMap;
     }
+
 
 
     public static void main(String[] args) throws Exception{
 
-        System.out.println("Start Time:" + new Date());
-        getFeatureMap();
-        System.out.println("End Time:" + new Date());
+//        System.out.println("Start Time:" + new Date());
+//        System.out.println("End Time:" + new Date());
 
-//        clusterTool.hierarchicalCluster(featureMap,threshold);
+        clusterTool.hierarchicalCluster(getFeatureMap(),threshold);
     }
 
 }

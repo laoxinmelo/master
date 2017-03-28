@@ -180,13 +180,4 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
 
     }
 
-    public static void main(String[] args) {
-
-        RelatedWordCalculator relatedWordCalculator = new RelatedWordCalculatorImpl();
-        Set<String> wordSet = grammarRelationSet.wordSet;
-        for(String word:wordSet) {
-            relatedWordCalculator.calculateRelatedWordList(word);
-        }
-    }
-
 }

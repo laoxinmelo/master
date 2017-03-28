@@ -2,6 +2,7 @@ package com.raul.bupt.calculate.clusters.methods.theirs;
 
 import com.raul.bupt.calculate.simi.dataobject.RelationWord;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,6 @@ public interface ClusterToolOldMethod {
      * @param map
      * @param threshold
      */
-    void hierarchicalCluster(Map<String,List<RelationWord>[]> map, float threshold);
+    void hierarchicalCluster(Map<String,List<ArrayList<RelationWord>>> map, float threshold);
 
 }
