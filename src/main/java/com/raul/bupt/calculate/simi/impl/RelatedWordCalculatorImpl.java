@@ -16,14 +16,14 @@ import java.util.Set;
  */
 public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
 
-    //ÓïÁÏÖĞµÄËùÓĞRelationDO
+    //è¯­æ–™ä¸­çš„æ‰€æœ‰RelationDO
     private static final GrammarRelationSet grammarRelationSet = getGrammarRelationSet();
-    //RelationDO±£´æÂ·¾¶
+    //RelationDOä¿å­˜è·¯å¾„
     private static final String grammarSavePath = "./result/grammarList";
 
 
     /**
-     * »ñÈ¡ÓïÁÏÖĞËù¶ÔÓ¦µÄwordList,relationList,relationDOList
+     * è·å–è¯­æ–™ä¸­æ‰€å¯¹åº”çš„wordList,relationList,relationDOList
      *
      * @return
      */
@@ -67,7 +67,7 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
 
 
     /**
-     * ¼ÆËãÓëÖ®Ïà¹ØµÄËùÓĞRelationWord¼¯ºÏ
+     * è®¡ç®—ä¸ä¹‹ç›¸å…³çš„æ‰€æœ‰RelationWordé›†åˆ
      *
      * @param word
      * @return
@@ -97,10 +97,10 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
 
                 for (String relationName : relationSet) {
 
-                    int WordRelationCandidateWord = 0;  //°üº¬ÁËÊäÈë´Ê¡¢ºòÑ¡´ÊÒÔ¼°Ïà¹ØÓïÒå¹ØÏµµÄÊıÁ¿
-                    int AnywordRelationAnyword = 0;  //°üº¬ÁËÏà¹ØÓïÒå¹ØÏµµÄÊıÁ¿
-                    int WordRelationAnyword = 0;  //°üº¬ÁËÊäÈë´Ê¡¢Ïà¹ØÓïÒå¹ØÏµµÄÊıÁ¿
-                    int AnywordRelationCandidateWord = 0;  //°üº¬ÁËºòÑ¡´Ê¡¢Ïà¹ØÓïÒå¹ØÏµµÄÊıÁ¿
+                    int WordRelationCandidateWord = 0;  //åŒ…å«äº†è¾“å…¥è¯ã€å€™é€‰è¯ä»¥åŠç›¸å…³è¯­ä¹‰å…³ç³»çš„æ•°é‡
+                    int AnywordRelationAnyword = 0;  //åŒ…å«äº†ç›¸å…³è¯­ä¹‰å…³ç³»çš„æ•°é‡
+                    int WordRelationAnyword = 0;  //åŒ…å«äº†è¾“å…¥è¯ã€ç›¸å…³è¯­ä¹‰å…³ç³»çš„æ•°é‡
+                    int AnywordRelationCandidateWord = 0;  //åŒ…å«äº†å€™é€‰è¯ã€ç›¸å…³è¯­ä¹‰å…³ç³»çš„æ•°é‡
 
                     for (RelationDO relationDO : relationDOList) {
 
