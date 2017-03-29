@@ -2,9 +2,11 @@ package com.raul.bupt.apply;
 
 import com.raul.bupt.calculate.clusters.methods.ours.ClusterToolNewMethod;
 import com.raul.bupt.calculate.clusters.methods.ours.impl.ClusterToolNewMethodImpl;
+import com.raul.bupt.calculate.clusters.methods.theirs.impl.ClusterToolOldMethodImpl;
 import com.raul.bupt.word2vec.Word2VEC;
 
 import java.io.*;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +69,11 @@ public class NewMethodFirstClusterApply {
         loadModel();
         Map<String,float[][]> featureMap = getFeatureMap();
 
+
+        System.out.println("Start Time:" + new Date());
         clusterTool.hierarchicalCluster(featureMap,threshold);
+        System.out.println("End Time:" + new Date());
+
+
     }
 }

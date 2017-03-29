@@ -12,8 +12,7 @@ import java.util.*;
  */
 public class OldMethodFirstClusterApply {
 
-    //层次聚类工具
-    private static final ClusterToolOldMethod clusterTool = new ClusterToolOldMethodImpl(0);
+
 
 //    private static final RelatedWordCalculator relatedWordCalculator = new RelatedWordCalculatorImpl();
 
@@ -24,7 +23,7 @@ public class OldMethodFirstClusterApply {
     private static final String relationWordSavePath = "result/relationWord/";
 
     //阈值
-    private static final float threshold = Float.valueOf("0.4");
+    private static final float threshold = Float.valueOf("0.2");
 
     /**
      * 计算所有候选特征词的RelationWord并保存
@@ -89,13 +88,35 @@ public class OldMethodFirstClusterApply {
     }
 
 
+    /**
+     * 进行聚类操作
+     *
+     * @param featureMap
+     * @param clusterTool
+     */
+    private static void clusterOperation(Map<String,List<ArrayList<RelationWord>>> featureMap,ClusterToolOldMethod clusterTool) {
+
+        clusterTool.hierarchicalCluster(featureMap,threshold);
+
+    }
+
+
 
     public static void main(String[] args) throws Exception{
 
 //        System.out.println("Start Time:" + new Date());
 //        System.out.println("End Time:" + new Date());
 
-        clusterTool.hierarchicalCluster(getFeatureMap(),threshold);
+        Map<String,List<ArrayList<RelationWord>>> featureMap = getFeatureMap();
+
+        for(int i=0;i<5;i++) {
+            System.out.println("Start Time:" + new Date());
+            clusterOperation(featureMap, new ClusterToolOldMethodImpl(i));
+            System.out.println("End Time:" + new Date());
+
+            System.out.println("____________________________________");
+        }
+
     }
 
 }

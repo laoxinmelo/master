@@ -126,9 +126,9 @@ public class ClusterToolNewMethodImpl implements ClusterToolNewMethod {
         }
 
         for(String word:vectorMap.keySet()) {
-//            if(word.split(indexTag).length>1) {
+            if(word.split(indexTag).length>1) {
                 System.out.println(word.replaceAll(indexTag,"\t"));
-//            }
+            }
         }
     }
 

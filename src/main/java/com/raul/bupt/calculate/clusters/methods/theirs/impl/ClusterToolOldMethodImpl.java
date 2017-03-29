@@ -64,19 +64,18 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
         String word1 = "";
         String word2 = "";
 
-        int count = 1;
         for (String word : wordSet) {
 
-            int tempCount = 0;
             for (String otherWord : wordSet) {
 
-                tempCount += 1;
-                if (tempCount <= count) {
+                if(word.equals(otherWord)) {
                     continue;
                 }
 
+
                 double simiValue = 0.0;
 
+//                if(word.contains("笔记本") && otherWord.contains("本本")) {
                 List<ArrayList<RelationWord>> relationWordListArray1 = wordMap.get(word);
                 List<ArrayList<RelationWord>> relationWordListArray2 = wordMap.get(otherWord);
 
@@ -86,14 +85,16 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
                     }
                 }
 
-                simiValue = simiValue/(relationWordListArray1.size()+relationWordListArray2.size());
+                simiValue = simiValue/(relationWordListArray1.size() * relationWordListArray2.size());
+//                System.out.println(simiValue);
+//                }
+
                 if(simiValue > maxValue) {
                     word1 = word;
                     word2 = otherWord;
                     maxValue = simiValue;
                 }
 
-                count += 1;
             }
         }
 
@@ -134,6 +135,7 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
             wordMap.remove(word1);
             wordMap.remove(word2);
             wordMap.put(word1 + indexTag + word2, relationWordListArray);
+//            System.out.println(word1 + indexTag + word2  + "    " + clusterIndex.getMaxSimi());
 
             if (wordMap.size() > 1) {
                 clusterIndex = clusterCalculate(wordMap);
@@ -143,7 +145,9 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
         }
 
         for(String word:wordMap.keySet()) {
-            System.out.println(word);
+            if(word.split(indexTag).length > 1) {
+                System.out.println(word);
+            }
         }
 
     }
