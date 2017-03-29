@@ -146,7 +146,7 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
 
         for(String word:wordMap.keySet()) {
             if(word.split(indexTag).length > 1) {
-                System.out.println(word);
+                System.out.println(word.replaceAll(indexTag,"\t"));
             }
         }
 
