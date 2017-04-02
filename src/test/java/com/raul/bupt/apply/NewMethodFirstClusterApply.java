@@ -30,7 +30,7 @@ public class NewMethodFirstClusterApply {
     private static final String attributePath = "result/startAttribute.txt";
 
     //阈值
-    private static final float threshold = Float.valueOf("0.4");
+    private static final float threshold = Float.valueOf("0");
 
     /**
      * 加载模型
