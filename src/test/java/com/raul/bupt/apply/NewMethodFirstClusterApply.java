@@ -2,7 +2,6 @@ package com.raul.bupt.apply;
 
 import com.raul.bupt.calculate.clusters.methods.ours.ClusterToolNewMethod;
 import com.raul.bupt.calculate.clusters.methods.ours.impl.ClusterToolNewMethodImpl;
-import com.raul.bupt.calculate.clusters.methods.theirs.impl.ClusterToolOldMethodImpl;
 import com.raul.bupt.word2vec.Word2VEC;
 
 import java.io.*;

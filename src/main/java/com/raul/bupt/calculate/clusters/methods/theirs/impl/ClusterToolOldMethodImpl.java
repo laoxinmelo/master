@@ -1,5 +1,6 @@
 package com.raul.bupt.calculate.clusters.methods.theirs.impl;
 
+import com.raul.bupt.calculate.clusters.methods.AbstractClusterTool;
 import com.raul.bupt.calculate.clusters.methods.dataobject.ClusterIndex;
 import com.raul.bupt.calculate.clusters.methods.theirs.ClusterToolOldMethod;
 import com.raul.bupt.calculate.simi.SimiCalculator;
@@ -7,6 +8,10 @@ import com.raul.bupt.calculate.simi.dataobject.RelationWord;
 import com.raul.bupt.calculate.simi.dataobject.SameRelationWord;
 import com.raul.bupt.calculate.simi.impl.simi.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,11 +20,11 @@ import java.util.Set;
 /**
  * Created by Administrator on 2017/3/24.
  */
-public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
+public class ClusterToolOldMethodImpl extends AbstractClusterTool implements ClusterToolOldMethod {
 
     private int simiCalculatorIndex; //所选用的相似度计算方法索引
 
-    private static final String indexTag = "_";
+
 
     private static final List<SimiCalculator> simiCalculatorList = new ArrayList<SimiCalculator>();
     static {
@@ -34,6 +39,7 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
     public ClusterToolOldMethodImpl(int simiCalculatorIndex) {
         this.simiCalculatorIndex = simiCalculatorIndex;
     }
+
 
 
     /**

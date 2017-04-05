@@ -1,9 +1,9 @@
 package com.raul.bupt.calculate.clusters.methods.ours.impl;
 
+import com.raul.bupt.calculate.clusters.methods.AbstractClusterTool;
 import com.raul.bupt.calculate.clusters.methods.ours.ClusterToolNewMethod;
 import com.raul.bupt.calculate.clusters.methods.dataobject.ClusterIndex;
 
-import javax.crypto.Mac;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,14 +13,7 @@ import java.util.*;
 /**
  * Created by Administrator on 2016/11/16.
  */
-public class ClusterToolNewMethodImpl implements ClusterToolNewMethod {
-
-    //用来对两个词之间进行分隔
-    private static final String indexTag = "_";
-
-    private static final String goldClusteringSavePath = "result/goldCluster.txt";
-
-    private static final List<String[]> goldClusterList = getGoldClustering();
+public class ClusterToolNewMethodImpl extends AbstractClusterTool implements ClusterToolNewMethod  {
 
     /**
      * 计算两个向量之间的余弦距离
@@ -41,92 +34,6 @@ public class ClusterToolNewMethodImpl implements ClusterToolNewMethod {
         dist = dist/(float)(Math.sqrt(Double.valueOf(temp1))*Math.sqrt(Double.valueOf(temp2)));
 
         return dist;
-    }
-
-
-    /**
-     * 获取标准聚类数据集
-     *
-     * @return
-     */
-    private static List<String[]> getGoldClustering() {
-        List<String[]> goldClusterList = null;
-
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(goldClusteringSavePath))));
-            goldClusterList = new ArrayList<String[]>();
-
-            String temp = bufferedReader.readLine();
-            while(temp != null) {
-                String[] wordArray = temp.split(indexTag);
-                if(wordArray.length>1) {
-                    goldClusterList.add(wordArray);
-                }
-                temp = bufferedReader.readLine();
-            }
-
-        }catch (Exception e) {
-            e.printStackTrace();
-        }finally {
-            return goldClusterList;
-        }
-    }
-
-
-    /**
-     * 对聚类效果进行评估
-     *
-     * @param vectorMap
-     */
-    private void clusterEvaluate(Map<String,float[][]> vectorMap) {
-
-        Set<String> wordSet = vectorMap.keySet();
-        int candidateCluster = vectorMap.keySet().size();
-
-        int goldClusterWordNum = 0;
-        for(String[] goldWordArray:goldClusterList) {
-            goldClusterWordNum += goldWordArray.length;
-        }
-
-
-        double MicroF = 0;
-        double MacroF = 0;
-
-        for(String[] goldWordArray:goldClusterList) {
-            int goldWordNum = goldWordArray.length;
-            double F = 0;
-
-            for(String wordArrayStr:wordSet) {
-
-                String[] candidateWordArray = wordArrayStr.split(indexTag);
-                int candidateWordNum = candidateWordArray.length;
-                int candidateSameWordNum = 0;
-
-                for(String goldWord:goldWordArray) {
-                    for(String word:candidateWordArray) {
-                        if(goldWord.equals(word)) {
-                            candidateSameWordNum += 1;
-                        }
-                    }
-                }
-
-                double precision = Double.valueOf(candidateSameWordNum)/Double.valueOf(candidateWordNum);
-                double recall = Double.valueOf(candidateSameWordNum)/Double.valueOf(goldWordNum);
-                double tempF = precision*recall/(precision + recall);
-
-                if(tempF>F) {
-                    F = tempF;
-                }
-
-            }
-
-            MicroF += Double.valueOf(goldWordNum)/Double.valueOf(goldClusterWordNum) * F;
-            MacroF += F;
-
-        }
-
-        MacroF = MacroF/goldClusterList.size();
-        System.out.println(candidateCluster + "\t" + MicroF + "\t" + MacroF);
     }
 
 
