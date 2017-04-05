@@ -120,6 +120,8 @@ public class ClusterToolOldMethodImpl extends AbstractClusterTool implements Clu
      */
     public void hierarchicalCluster(Map<String,List<ArrayList<RelationWord>>> wordMap, float threshold) {
 
+        clusterEvaluate(wordMap);
+
         ClusterIndex clusterIndex = clusterCalculate(wordMap);
         while(clusterIndex.getMaxSimi() >= threshold) {
 
@@ -140,7 +142,8 @@ public class ClusterToolOldMethodImpl extends AbstractClusterTool implements Clu
             wordMap.remove(word1);
             wordMap.remove(word2);
             wordMap.put(word1 + indexTag + word2, relationWordListArray);
-//            System.out.println(word1 + indexTag + word2  + "    " + clusterIndex.getMaxSimi());
+
+            clusterEvaluate(wordMap);
 
             if (wordMap.size() > 1) {
                 clusterIndex = clusterCalculate(wordMap);
