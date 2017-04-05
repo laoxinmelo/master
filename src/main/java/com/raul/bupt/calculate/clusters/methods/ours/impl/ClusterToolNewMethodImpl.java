@@ -3,6 +3,11 @@ package com.raul.bupt.calculate.clusters.methods.ours.impl;
 import com.raul.bupt.calculate.clusters.methods.ours.ClusterToolNewMethod;
 import com.raul.bupt.calculate.clusters.methods.dataobject.ClusterIndex;
 
+import javax.crypto.Mac;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 
 /**
@@ -12,6 +17,10 @@ public class ClusterToolNewMethodImpl implements ClusterToolNewMethod {
 
     //用来对两个词之间进行分隔
     private static final String indexTag = "_";
+
+    private static final String goldClusteringSavePath = "result/goldCluster.txt";
+
+    private static final List<String[]> goldClusterList = getGoldClustering();
 
     /**
      * 计算两个向量之间的余弦距离
@@ -36,76 +45,88 @@ public class ClusterToolNewMethodImpl implements ClusterToolNewMethod {
 
 
     /**
+     * 获取标准聚类数据集
+     *
+     * @return
+     */
+    private static List<String[]> getGoldClustering() {
+        List<String[]> goldClusterList = null;
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(goldClusteringSavePath))));
+            goldClusterList = new ArrayList<String[]>();
+
+            String temp = bufferedReader.readLine();
+            while(temp != null) {
+                String[] wordArray = temp.split(indexTag);
+                if(wordArray.length>1) {
+                    goldClusterList.add(wordArray);
+                }
+                temp = bufferedReader.readLine();
+            }
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            return goldClusterList;
+        }
+    }
+
+
+    /**
      * 对聚类效果进行评估
      *
      * @param vectorMap
-     * @param allWordVectorCentroid
-     * @return
      */
-    public double clusterEvaluate(Map<String,float[][]> vectorMap, float[] allWordVectorCentroid) {
+    private void clusterEvaluate(Map<String,float[][]> vectorMap) {
 
         Set<String> wordSet = vectorMap.keySet();
+        int candidateCluster = vectorMap.keySet().size();
 
-        double numerator = 0.0;
-        double denominator = 0.0;
+        int goldClusterWordNum = 0;
+        for(String[] goldWordArray:goldClusterList) {
+            goldClusterWordNum += goldWordArray.length;
+        }
 
-        for(String wordArrayStr:wordSet) {
-            float[][] vectorArray = vectorMap.get(wordArrayStr);
-            String[] wordArray = wordArrayStr.split(indexTag);
-            int wordNum = wordArray.length;
 
-            //计算簇内部各个词之间的相似度
-            double inClusterSimilarity = 0.0;
-            for(int i=0;i<wordNum;i++) {
-                for(int j=0;j<wordNum;j++) {
-                    inClusterSimilarity += getSimi(vectorArray[i],vectorArray[j]);
+        double MicroF = 0;
+        double MacroF = 0;
+
+        for(String[] goldWordArray:goldClusterList) {
+            int goldWordNum = goldWordArray.length;
+            double F = 0;
+
+            for(String wordArrayStr:wordSet) {
+
+                String[] candidateWordArray = wordArrayStr.split(indexTag);
+                int candidateWordNum = candidateWordArray.length;
+                int candidateSameWordNum = 0;
+
+                for(String goldWord:goldWordArray) {
+                    for(String word:candidateWordArray) {
+                        if(goldWord.equals(word)) {
+                            candidateSameWordNum += 1;
+                        }
+                    }
                 }
-            }
-            inClusterSimilarity = inClusterSimilarity/wordNum;
-            numerator += inClusterSimilarity;
 
-            //求簇的质心，并计算簇与整体之间的相似度
-            float[] wordVectorCentroid = new float[vectorMap.get(wordArrayStr)[0].length];
-            for(int i=0;i<wordVectorCentroid.length;i++) {
-                for(int j=0;j<wordNum;j++) {
-                    wordVectorCentroid[i] += vectorArray[j][i];
+                double precision = Double.valueOf(candidateSameWordNum)/Double.valueOf(candidateWordNum);
+                double recall = Double.valueOf(candidateSameWordNum)/Double.valueOf(goldWordNum);
+                double tempF = precision*recall/(precision + recall);
+
+                if(tempF>F) {
+                    F = tempF;
                 }
-                wordVectorCentroid[i] = wordVectorCentroid[i]/wordNum;
+
             }
 
-            double betweenClusterSimilarity = getSimi(wordVectorCentroid,allWordVectorCentroid) * wordNum;
-            betweenClusterSimilarity = betweenClusterSimilarity/Math.sqrt(inClusterSimilarity*wordNum);
-            denominator += betweenClusterSimilarity;
+            MicroF += Double.valueOf(goldWordNum)/Double.valueOf(goldClusterWordNum) * F;
+            MacroF += F;
 
         }
-        return numerator/denominator;
-    }
 
-    /**
-     * 将所有词构造成一个簇并求其质心
-     *
-     * @param originVectorMap
-     * @return
-     */
-    public float[] getAllWordVectorCentroid(Map<String,float[][]> originVectorMap) {
-
-        Set<String> wordSet = originVectorMap.keySet();
-
-        List<float[]> vectorList = new ArrayList<float[]>();
-        for(String word:wordSet) {
-            float[][] wordVector = originVectorMap.get(word);
-            vectorList.add(wordVector[0]);
-        }
-
-        float[] vectorArray = new float[vectorList.get(0).length];
-        for(int i=0;i<vectorArray.length;i++) {
-            for(int j=0;j<vectorList.size();j++) {
-                vectorArray[i] += vectorList.get(j)[i];
-            }
-            vectorArray[i] = vectorArray[i]/vectorList.size();
-        }
-
-        return vectorArray;
+        MacroF = MacroF/goldClusterList.size();
+        System.out.println(candidateCluster + "\t" + MicroF + "\t" + MacroF);
     }
 
 
@@ -170,14 +191,7 @@ public class ClusterToolNewMethodImpl implements ClusterToolNewMethod {
      */
     public void hierarchicalCluster(Map<String,float[][]> vectorMap,float threshold) {
 
-        float[] allWordVectorCentroid = getAllWordVectorCentroid(vectorMap);
-
-        double maxClusterEvaluate = 0.0;
-
-        double evaluateResult = clusterEvaluate(vectorMap,allWordVectorCentroid);
-        if(evaluateResult > maxClusterEvaluate) {
-            maxClusterEvaluate = evaluateResult;
-        }
+        clusterEvaluate(vectorMap);
 
         ClusterIndex clusterIndex = clusterCalculate(vectorMap);
         while(clusterIndex.getMaxSimi() >= threshold) {
@@ -203,15 +217,7 @@ public class ClusterToolNewMethodImpl implements ClusterToolNewMethod {
             vectorMap.remove(word2);
             vectorMap.put(word1 + indexTag + word2, f);
 
-            evaluateResult = clusterEvaluate(vectorMap,allWordVectorCentroid);
-            if(evaluateResult > maxClusterEvaluate) {
-                maxClusterEvaluate = evaluateResult;
-
-                for(String word:vectorMap.keySet()) {
-                    System.out.println(word.replaceAll(indexTag,"\t"));
-                }
-                System.out.println("________________________________________");
-            }
+            clusterEvaluate(vectorMap);
 
 
             if (vectorMap.size() > 1) {

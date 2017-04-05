@@ -107,7 +107,6 @@ public class ClusterToolOldMethodImpl implements ClusterToolOldMethod {
     }
 
 
-
     /**
      * 进行层次聚类
      * @param wordMap
