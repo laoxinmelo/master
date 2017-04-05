@@ -152,11 +152,11 @@ public class ClusterToolOldMethodImpl extends AbstractClusterTool implements Clu
             }
         }
 
-        for(String word:wordMap.keySet()) {
-            if(word.split(indexTag).length > 1) {
-                System.out.println(word.replaceAll(indexTag,"\t"));
-            }
-        }
+//        for(String word:wordMap.keySet()) {
+//            if(word.split(indexTag).length > 1) {
+//                System.out.println(word.replaceAll(indexTag,"\t"));
+//            }
+//        }
 
     }
 }

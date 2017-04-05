@@ -23,7 +23,7 @@ public class OldMethodFirstClusterApply {
     private static final String relationWordSavePath = "result/relationWord/";
 
     //阈值
-    private static final float threshold = Float.valueOf("0.2");
+    private static final float threshold = Float.MIN_VALUE;
 
     /**
      * 计算所有候选特征词的RelationWord并保存
@@ -107,15 +107,15 @@ public class OldMethodFirstClusterApply {
 //        System.out.println("Start Time:" + new Date());
 //        System.out.println("End Time:" + new Date());
 
-        Map<String,List<ArrayList<RelationWord>>> featureMap = getFeatureMap();
 
         for(int i=0;i<5;i++) {
             System.out.println("Start Time:" + new Date());
-            clusterOperation(featureMap, new ClusterToolOldMethodImpl(i));
+            Map<String,List<ArrayList<RelationWord>>> featureMap = getFeatureMap();
+            clusterOperation(featureMap, new ClusterToolOldMethodImpl(3));
             System.out.println("End Time:" + new Date());
-
             System.out.println("____________________________________");
         }
+
 
     }
 
