@@ -13,10 +13,10 @@ public interface RelatedWordCalculator {
 
 
     /**
-     * 计算与之相关的所有RelationWord集合
+     * 计算与之相关的所有RelationWord集合，并保存
      *
      * @param word
      * @return
      */
-    List<RelationWord> calculateRelatedWordList(String word);
+    void calculateRelatedWordList(String word);
 }

@@ -2,7 +2,9 @@ package com.raul.bupt.apply;
 
 import com.raul.bupt.calculate.clusters.methods.theirs.ClusterToolOldMethod;
 import com.raul.bupt.calculate.clusters.methods.theirs.impl.ClusterToolOldMethodImpl;
+import com.raul.bupt.calculate.simi.RelatedWordCalculator;
 import com.raul.bupt.calculate.simi.dataobject.RelationWord;
+import com.raul.bupt.calculate.simi.impl.RelatedWordCalculatorImpl;
 
 import java.io.*;
 import java.util.*;
@@ -38,7 +40,7 @@ public class OldMethodFirstClusterApply {
 //
 //        while(temp != null) {
 //            String word = temp.trim();
-//            List<RelationWord> relationWordList = relatedWordCalculator.calculateRelatedWordList(word);
+//            relatedWordCalculator.calculateRelatedWordList(word);
 //
 //            temp = br.readLine();
 //        }
@@ -108,10 +110,11 @@ public class OldMethodFirstClusterApply {
 //        System.out.println("End Time:" + new Date());
 
 
-        for(int i=0;i<5;i++) {
+//        calculateRelationWord();
+        for(int i=2;i<3;i++) {
             System.out.println("Start Time:" + new Date());
             Map<String,List<ArrayList<RelationWord>>> featureMap = getFeatureMap();
-            clusterOperation(featureMap, new ClusterToolOldMethodImpl(3));
+            clusterOperation(featureMap, new ClusterToolOldMethodImpl(i));
             System.out.println("End Time:" + new Date());
             System.out.println("____________________________________");
         }

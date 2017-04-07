@@ -89,13 +89,20 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
      * @param word
      * @return
      */
-    public List<RelationWord> calculateRelatedWordList(String word) {
+    public void calculateRelatedWordList(String word) {
 
         Map<String,HashMap<String,Integer>> relationMap = grammarRelationSet.relationMap;
         Set<String> wordSet = grammarRelationSet.wordSet;
 
         if(!wordSet.contains(word)) {
-            return null;
+            return ;
+        }
+
+        File[] files = new File("result/relationWord").listFiles();
+        for(File file:files) {
+            if(file.getName().equals(word)) {
+                return ;
+            }
         }
 
 
@@ -103,7 +110,8 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
         System.out.println(word + ":");
 
         try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("result/relationWord/" + word));
+
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream( "result/relationWord/" + word));
 
 
             for (String candidateWord : wordSet) {
@@ -176,7 +184,6 @@ public class RelatedWordCalculatorImpl implements RelatedWordCalculator{
         }
 
         System.out.println("______________________________________");
-        return relationWordList;
 
     }
 

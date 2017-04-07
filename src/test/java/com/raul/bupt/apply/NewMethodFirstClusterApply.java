@@ -54,6 +54,8 @@ public class NewMethodFirstClusterApply {
             if(tempVector != null) {
                 float[][] vector = {tempVector};
                 featureMap.put(word,vector);
+            }else {
+                System.out.println(temp);
             }
 
             temp = br.readLine();
